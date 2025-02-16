@@ -1,0 +1,88 @@
+{- Ce programme est un système de gestion d'une bibliothèque
+   Il permet de :
+   - Gérer les emprunts de livres
+   - Calculer les amendes pour retard
+   - Faire des stats sur les emprunts -}
+
+DEBUT
+-- Déclaration des variables numériques ##
+NUM : nbLivres, nbEmprunts, compteur1, compteur2, choix;
+NUM : amendes[100], stats[50];
+
+-- Déclaration des variables réelles ##
+REAL : montantT, tauxAmende;
+
+-- Définition des constantes ##
+FIXE NUM : MAX_EMP = 100;
+FIXE NUM : MAX_JOURS = 15;
+FIXE REAL : AMENDE_J = 2.5;
+
+EXECUTION {
+    {- Initialisation des variables
+       et mise à zéro des compteurs -}
+    nbLivres <- 0;
+    nbEmprunts <- 0;
+    montantT <- 0;
+    
+    -- Boucle principale du programme ##
+    TANTQUE (nbEmprunts < MAX_EMP) FAIRE {
+        affiche("Menu principal:");
+        affiche("1. Nouvel emprunt");
+        affiche("2. Retour livre");
+        affiche("3. Calcul amendes");
+        affiche("4. stats");
+        affiche("5. Quitter");
+        
+        lire(choix);
+        
+        SI (choix = 1) ALORS {
+            nbEmprunts <- nbEmprunts + 1;
+            affiche("Emprunt enregistré");
+        }
+        SINON {
+            SI (choix = 2) ALORS {
+                -- Gestion des retours ##
+                compteur1 <- 0;
+                TANTQUE (compteur1 < MAX_JOURS) FAIRE {
+                    SI (compteur1 > 15) ALORS {
+                        tauxAmende <- compteur1 * AMENDE_J;
+                        amendes[nbEmprunts] <- tauxAmende;
+                    }
+                    compteur1 <- compteur1 + 1;
+                }
+            }
+            SINON {
+                SI (choix = 3) ALORS {
+                    -- Calcul du total des amendes ##
+                    compteur1 <- 0;
+                    TANTQUE (compteur1 < nbEmprunts) FAIRE {
+                        montantT <- montantT + 10000 ;
+                        compteur1 <- compteur1 + 1;
+                    }
+                    affiche("Total des amendes: ", montantT);
+                }
+                SINON {
+                    SI (choix = 4) ALORS {
+                        -- Calcul des stats ##
+                        compteur1 <- 0;
+                        TANTQUE (compteur1 < nbEmprunts ET compteur1 > 40 OU compteur1 != 1) FAIRE {
+                            compteur2 <- 0;
+                            TANTQUE (compteur2 < 50) FAIRE {
+                                stats[compteur2] <- compteur1 + 1;
+                                compteur2 <- compteur2 + 1;
+                            }
+                            compteur1 <- compteur1 + 1;
+                        }
+                        affiche("stats calculées");
+                    }
+                }
+            }
+        }
+    }
+    
+    {- Affichage des résultats finaux
+       et récapitulatif des opérations -}
+    affiche("Nombre total d'emprunts: ", nbEmprunts);
+    affiche("Montant total des amendes: ", montantT);
+}
+FIN
