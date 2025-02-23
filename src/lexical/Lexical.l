@@ -15,9 +15,9 @@ cstint [+-]?[0-9]+
 %%
 
 
-"FIXE" { 
-    insererMotCle("FIXE"); 
-    return FIXE; 
+"FIXE" {
+    insererMotCle("FIXE");
+    return FIXE;
 }
 "SI" { 
     insererMotCle("SI"); 
