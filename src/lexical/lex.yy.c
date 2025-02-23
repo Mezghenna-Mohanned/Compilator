@@ -1969,8 +1969,6 @@ static void yynoreturn yy_fatal_error (const char* msg )
 	exit( YY_EXIT_FAILURE );
 }
 
-/* Redefine yyless() so it works in section 3 code. */
-
 #undef yyless
 #define yyless(n) \
 	do \

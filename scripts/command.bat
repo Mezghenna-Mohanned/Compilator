@@ -7,3 +7,4 @@ compilateur.exe < test1.txt
 echo.
 echo Test 2:
 compilateur.exe < test2.txt
+echo.

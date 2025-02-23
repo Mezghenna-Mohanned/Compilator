@@ -19,7 +19,7 @@ cstint [+-]?[0-9]+
     insererMotCle("FIXE");
     return FIXE;
 }
-"SI" { 
+"SI" {
     insererMotCle("SI"); 
     return SI; 
 }
