@@ -1,0 +1,33 @@
+MainPrgm L3_software;
+
+Var
+    let x, y, z : Int;
+    let A, B : [Int;10];
+    @define Const Software : Int = 91;
+
+BeginPg
+{
+    x := 5;
+    y := (x + 3) * 2;
+    if (y > 10) then {
+        output("Valeur de y: ", y);
+    } else {
+        output("y est trop petit");
+    }
+
+    do {
+        x := x - 1;
+    } while (x > 0);
+
+    for i from 1 to 10 step 2 {
+        A[i] := A[i] + i;
+    }
+}
+EndPg;
+
+<!- Ceci est un commentaire en ligne -!>
+
+{--
+    Ceci est un commentaire sur plusieurs lignes
+    Il explique le code MiniSoft
+--}

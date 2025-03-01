@@ -8,7 +8,7 @@ extern char *yytext;
 extern void yyerror(const char *s);
 extern void afficherTStab(void);
 extern void afficherToutesLesTablesSymboles(void);
-extern void gererTaille(char*, char*);  // Added function declaration
+extern void gererTaille(char*, char*);
 #define RED     "\033[1;31m"
 #define YELLOW  "\033[1;33m"
 #define RESET   "\033[0m"
