@@ -16,20 +16,20 @@ void yyerror(const char *s);
 #define GREEN   "\033[0;32m"
 %}
 
+/* Our semantic values: integers, floats, or strings */
 %union {
     int entier;
     float reel;
     char *str;
 }
 
-/* Token declarations (adapted to your lex.l) */
+/* Token declarations that must match those returned by lex.l */
 %token MAINPRGM VAR BEGINPG ENDPG
 %token LET DEFINE CONST
 %token IF THEN ELSE DO WHILE FOR FROM TO STEP
 %token INPUT OUTPUT
 %token INT_T FLOAT_T
 
-/* The following tokens are returned as strings or numbers */
 %token <str> ASSIGN   /* for ":=" */
 %token <str> EQ       /* for "==" */
 %token <str> NEQ      /* for "!=" */
@@ -52,14 +52,19 @@ void yyerror(const char *s);
 %left '+' '-'
 %left '*' '/'
 
+/* Declare nonterminals that carry a semantic value as a char* */
+%type <str> type constant_value expression
+
 %start program
 
 %%
 
+/* Program structure */
 program:
     MAINPRGM IDF ';' declarations BEGINPG block ENDPG ';'
     ;
 
+/* Declarations: variables and constant declarations */
 declarations:
       declarations declaration
     | /* empty */
@@ -88,11 +93,13 @@ const_declaration:
       CONST IDF ':' type ASSIGN constant_value  { /* No semantic action yet */ }
     ;
 
+/* Type: Int or Float */
 type:
       INT_T      { $$ = strdup("Int"); }
     | FLOAT_T    { $$ = strdup("Float"); }
     ;
 
+/* Constant value: return a string representation */
 constant_value:
       CSTINT {
            $$ = (char *)malloc(32);
@@ -107,15 +114,18 @@ constant_value:
        }
     ;
 
+/* Block of statements */
 block:
       '{' statements '}'
     ;
 
+/* Statements: a sequence of statements */
 statements:
       statements statement
     | /* empty */
     ;
 
+/* Statement: assignment, conditional, loop, or I/O */
 statement:
       assignment ';'
     | conditional
@@ -123,11 +133,14 @@ statement:
     | io_statement ';'
     ;
 
+/* Assignment: simple assignment and array assignment */
 assignment:
       IDF ASSIGN expression { /* No semantic action yet */ }
     | IDF '[' CSTINT ']' ASSIGN expression { /* No semantic action yet */ }
+    | IDF '[' expression ']' ASSIGN expression { /* No semantic action yet */ }
     ;
 
+/* Expression: arithmetic expressions and identifiers/constants */
 expression:
       expression '+' expression { /* No semantic action yet */ }
     | expression '-' expression { /* No semantic action yet */ }
@@ -138,21 +151,25 @@ expression:
     | IDF                        { $$ = strdup($1); }
     ;
 
+/* Conditional statement */
 conditional:
       IF '(' expression ')' THEN block ELSE block
     | IF '(' expression ')' THEN block
     ;
 
+/* Loop statements: do-while and for-loop */
 loop:
       DO block WHILE '(' expression ')'
     | FOR IDF FROM expression TO expression STEP expression block
     ;
 
+/* I/O statements */
 io_statement:
       OUTPUT '(' io_args ')'
     | INPUT '(' IDF ')'
     ;
 
+/* I/O arguments: one or more expressions */
 io_args:
       io_args ',' expression
     | expression
