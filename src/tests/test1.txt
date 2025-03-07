@@ -15,7 +15,7 @@ Déclaration des constantes
 
 FIXE REAL : MATH_PI = 3.14 ;
 FIXE NUM : num = 3 ;
-FIXE TEXT : phrase = "ISIL B" ;
+FIXE TEXT : phrase = "Software" ;
 
 -- declarations des tableaux ##
 NUM : tab[30] , tableau[10];
