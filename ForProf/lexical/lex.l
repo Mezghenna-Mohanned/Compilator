@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "syntaxique/syntax.tab.h"   /* Include Bison header with token definitions */
 
 int nb_ligne = 1;
 int col = 1;
