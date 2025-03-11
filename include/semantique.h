@@ -1,6 +1,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "ts.h"
+#include "color.h"
 
 extern void gestionIncompatibiliteEQ_NEQ(constant *exp1, constant *exp2);
 extern void yyerror(const char *s);
@@ -15,6 +17,10 @@ void insererOperateurNoAsso(const char* op);
 void insererOperateurLogique(const char* op);
 void insererOperateurArithmetique(const char* op);
 
+
+extern void gestionIncompatibiliteEQ_NEQ(constant *exp1, constant *exp2);
+extern void gestionErreurAssig(constant *p, char tete[]);
+extern struct constant *gestionIDF(char tete[]);
 
 #define max 20
 
@@ -288,3 +294,4 @@ void gererTaille(char teteTableau[], char tete[]) {
         yyerror("Indice hors limite");
     }
 }
+

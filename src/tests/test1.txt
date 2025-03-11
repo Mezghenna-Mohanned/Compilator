@@ -65,7 +65,7 @@ lire(tableau[i]) ;
 x <- a ; 
 b <- text ; 
 
-text <- "Mohanned et Nesrine" ; 
+text <- "Mohanned and Nesrine" ; 
 new_text <- text ; -- affectation d'un type text à un autre marche sans probleme ##
 
 
