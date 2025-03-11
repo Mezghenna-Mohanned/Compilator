@@ -6,7 +6,7 @@ typedef struct listeD {
     char *entite;
     char *type;
     int is_const;
-    union {          // YAAAW HEDI MCHI UNION TE3 BISON
+    union {
         int i;
         float f;
         char *s;
@@ -40,6 +40,12 @@ typedef struct liste {
 #define YELLOW  "\033[1;33m"
 #define CYAN    "\033[1;36m"
 #define MAGENTA "\033[1;35m"
+
+// Function declarations
+void insererMotCle(const char* mot);
+void insererOperateurNoAsso(const char* op);
+void insererOperateurLogique(const char* op);
+void insererOperateurArithmetique(const char* op);
 
 void afficherListe(const char *titre, liste *tete) {
     printf(CYAN "╭─────────────────────────────────────────────╮\n" RESET);

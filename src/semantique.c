@@ -1,55 +1,74 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "semantique.h"
+#include "ts.h"
 
-extern void gestionIncompatibiliteEQ_NEQ(constant *exp1, constant *exp2);
-extern void yyerror(const char *s);
-extern int insererTableau(char entite[], char type[], int taille, void *valeur);
-extern int insererTS(char entite[], char type[], int is_const, void *valeur);
-extern struct listeD *chercherTS(char nom[]);
-extern int rechercherTaille(char tete[]);
+struct listeD *TS = NULL;
+struct listeT *TStab = NULL;
 
+int insererTS(char entite[], char type[], int is_const, void *valeur) {
+    struct listeD *new_node = (struct listeD *)malloc(sizeof(struct listeD));
+    if (!new_node) {
+        yyerror("Memory allocation error");
+        return -1;
+    }
 
-void insererMotCle(const char* mot);
-void insererOperateurNoAsso(const char* op);
-void insererOperateurLogique(const char* op);
-void insererOperateurArithmetique(const char* op);
+    strcpy(new_node->entite, entite);
+    strcpy(new_node->type, type);
+    new_node->is_const = is_const;
+    if (strcmp(type, "NUM") == 0) {
+        new_node->valeur.i = ((struct constant *)valeur)->valeur.i;
+    } else if (strcmp(type, "REAL") == 0) {
+        new_node->valeur.f = ((struct constant *)valeur)->valeur.f;
+    } else if (strcmp(type, "TEXT") == 0) {
+        new_node->valeur.s = strdup(((struct constant *)valeur)->valeur.s);
+    }
+    new_node->suivant = TS;
+    TS = new_node;
+    return 0;
+}
 
+int insererTableau(char entite[], char type[], int taille, void *valeur) {
+    struct listeT *new_node = (struct listeT *)malloc(sizeof(struct listeT));
+    if (!new_node) {
+        yyerror("Memory allocation error");
+        return -1;
+    }
 
-#define max 20
+    strcpy(new_node->entite, entite);
+    strcpy(new_node->type, type);
+    new_node->taille = taille;
+    if (strcmp(type, "NUM") == 0) {
+        new_node->valeur.i = ((struct constant *)valeur)->valeur.i;
+    } else if (strcmp(type, "REAL") == 0) {
+        new_node->valeur.f = ((struct constant *)valeur)->valeur.f;
+    } else if (strcmp(type, "TEXT") == 0) {
+        new_node->valeur.s = strdup(((struct constant *)valeur)->valeur.s);
+    }
+    new_node->suivant = TStab;
+    TStab = new_node;
+    return 0;
+}
 
-typedef struct constant {
-    char type[max];
-    union {
-        int i;
-        float f;
-        char *s;
-    } valeur;
-} constant;
+struct listeD *chercherTS(char nom[]) {
+    struct listeD *current = TS;
+    while (current != NULL) {
+        if (strcmp(current->entite, nom) == 0) {
+            return current;
+        }
+        current = current->suivant;
+    }
+    return NULL;
+}
 
-typedef struct listeD {
-    char entite[max];
-    char type[max];
-    int is_const;
-    union {
-        int i;
-        float f;
-        char *s;
-    } valeur;
-    struct listeD *suivant;
-} listeD;
-
-typedef struct listeT {
-    char entite[max];
-    char type[max];
-    int taille;
-    union {
-        int i;
-        float f;
-        char *s;
-    } valeur;
-    struct listeT *suivant;
-} listeT;
+int rechercherTaille(char tete[]) {
+    struct listeT *current = TStab;
+    while (current != NULL) {
+        if (strcmp(current->entite, tete) == 0) {
+            return current->taille;
+        }
+        current = current->suivant;
+    }
+    return -1;
+}
 
 void inserstionTS_et_verifications_double_declarations(listeD *i, char type[], int isconst) {
     struct listeD *var;
@@ -90,26 +109,6 @@ struct listeT *creationVarlist2(char tete[], int taille, listeT *i) {
     strcpy(new_var->entite, tete);
     new_var->taille = taille;
     new_var->suivant = i;
-    return new_var;
-}
-
-struct listeD *constDeclaration(constant *p, char tete[], int j) {
-    struct listeD *new_var = (struct listeD *)malloc(sizeof(struct listeD));
-    strcpy(new_var->entite, tete);
-    if (j == 1) {
-        if (strcmp(p->type, "NUM") == 0) {
-            new_var->valeur.i = p->valeur.i;
-            strcpy(new_var->type, "NUM");
-        } else if (strcmp(p->type, "REAL") == 0) {
-            new_var->valeur.f = p->valeur.f;
-            strcpy(new_var->type, "REAL");
-        } else if (strcmp(p->type, "TEXT") == 0) {
-            new_var->valeur.s = strdup(p->valeur.s);
-            strcpy(new_var->type, "TEXT");
-        }
-    }
-    new_var->is_const = 1;
-    new_var->suivant = NULL;
     return new_var;
 }
 
