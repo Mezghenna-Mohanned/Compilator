@@ -1,6 +1,5 @@
 %{
-
-#include "semantique.h"   /* Will be found using -Iinclude */
+#include "include/semantique.h"
 extern int yylex(void);
 extern int nb_ligne;
 extern int col;
@@ -15,7 +14,6 @@ extern void gererTaille(char*, char*);
 #define RESET   "\033[0m"
 #define GREEN   "\033[0;32m"
 %}
-
 
 %union {
     int entier;
@@ -86,9 +84,9 @@ commantaire :
     ;
 
 declaration:
-    type ':' var_list ';'{inserstionTS_et_verifications_double_declarations($3,$1,0);} 
-    | type ':' var_list2 ';'{inserstionTStab_et_verifications_double_declarations($3,$1);}
-    | FIXE type ':' const_declaration ';'{inserstionTS_et_verifications_double_declarations($4,$2,1);}
+    type ':' var_list ';' {inserstionTS_et_verifications_double_declarations($3,$1,0);} 
+    | type ':' var_list2 ';' {inserstionTStab_et_verifications_double_declarations($3,$1);}
+    | FIXE type ':' const_declaration ';' {inserstionTS_et_verifications_double_declarations($4,$2,1);}
     ;
 
 type:
@@ -105,7 +103,7 @@ var_list2 :
     | idf '[' cstint ']' {$$=creationVarlist2($1 ,$3 , NULL);}
 
 const_declaration:
-    idf EQ constant_value{$$=constDeclaration($3,$1,1);}
+    idf EQ constant_value {$$=constDeclaration($3,$1,1);}
     | idf {$$=constDeclaration(NULL,$1,1);}
     ;
 
@@ -186,12 +184,12 @@ condition_not:
     ;
 
 condition_comp:
-    expression '<' expression{gestionIncompatiblite($1,$3);}
-    | expression '>' expression{gestionIncompatiblite($1,$3);}
-    | expression LE expression{gestionIncompatiblite($1,$3);}
-    | expression GE expression{gestionIncompatiblite($1,$3);}
-    | expression EQ expression{gestionIncompatibiliteEQ_NEQ($1,$3);} // Removed `é`
-    | expression NEQ expression{gestionIncompatibiliteEQ_NEQ($1,$3);}
+    expression '<' expression {gestionIncompatiblite($1,$3);}
+    | expression '>' expression {gestionIncompatiblite($1,$3);}
+    | expression LE expression {gestionIncompatiblite($1,$3);}
+    | expression GE expression {gestionIncompatiblite($1,$3);}
+    | expression EQ expression {gestionIncompatibiliteEQ_NEQ($1,$3);}
+    | expression NEQ expression {gestionIncompatibiliteEQ_NEQ($1,$3);}
     | '(' condition ')'
     ;
 
@@ -199,7 +197,7 @@ io_statement:
     AFFICHE '(' io_args ')'
     | LIRE '(' idf ')' {gestion_io_statemnt(0 ,$3,-1 );}
     | LIRE '(' idf '['cstint']' ')' {gestion_io_statemnt(1,$3,$5 );}
-    | LIRE '(' idf '[' idf ']' ')' { gererTaille($3, $5); } // Fixed missing semicolon
+    | LIRE '(' idf '[' idf ']' ')' { gererTaille($3, $5); }
     ;
 
 io_args:
