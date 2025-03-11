@@ -1,5 +1,6 @@
 %{
-#include "semantique.h"
+
+#include "semantique.h"   /* Will be found using -Iinclude */
 extern int yylex(void);
 extern int nb_ligne;
 extern int col;
@@ -14,6 +15,7 @@ extern void gererTaille(char*, char*);
 #define RESET   "\033[0m"
 #define GREEN   "\033[0;32m"
 %}
+
 
 %union {
     int entier;

@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_SYNTAX_TAB_H_INCLUDED
-# define YY_YY_SYNTAX_TAB_H_INCLUDED
+#ifndef YY_YY_SRC_SYNTAX_SYNTAX_TAB_H_INCLUDED
+# define YY_YY_SRC_SYNTAX_SYNTAX_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -54,39 +54,34 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    MAINPRGM = 258,                /* MAINPRGM  */
-    VAR = 259,                     /* VAR  */
-    BEGINPG = 260,                 /* BEGINPG  */
-    ENDPG = 261,                   /* ENDPG  */
-    LET = 262,                     /* LET  */
-    DEFINE = 263,                  /* DEFINE  */
-    CONST = 264,                   /* CONST  */
-    IF = 265,                      /* IF  */
-    THEN = 266,                    /* THEN  */
-    ELSE = 267,                    /* ELSE  */
-    DO = 268,                      /* DO  */
-    WHILE = 269,                   /* WHILE  */
-    FOR = 270,                     /* FOR  */
-    FROM = 271,                    /* FROM  */
-    TO = 272,                      /* TO  */
-    STEP = 273,                    /* STEP  */
-    INPUT = 274,                   /* INPUT  */
-    OUTPUT = 275,                  /* OUTPUT  */
-    INT_T = 276,                   /* INT_T  */
-    FLOAT_T = 277,                 /* FLOAT_T  */
-    ASSIGN = 278,                  /* ASSIGN  */
-    EQ = 279,                      /* EQ  */
-    NEQ = 280,                     /* NEQ  */
-    LE = 281,                      /* LE  */
-    GE = 282,                      /* GE  */
-    AND = 283,                     /* AND  */
-    OR = 284,                      /* OR  */
-    NOT = 285,                     /* NOT  */
-    CSTINT = 286,                  /* CSTINT  */
-    CSTFLT = 287,                  /* CSTFLT  */
-    IDF = 288,                     /* IDF  */
-    TEXT = 289,                    /* TEXT  */
-    COMMENT = 290                  /* COMMENT  */
+    DEBUT = 258,                   /* DEBUT  */
+    FIN = 259,                     /* FIN  */
+    EXECUTION = 260,               /* EXECUTION  */
+    FIXE = 261,                    /* FIXE  */
+    SI = 262,                      /* SI  */
+    ALORS = 263,                   /* ALORS  */
+    SINON = 264,                   /* SINON  */
+    TANTQUE = 265,                 /* TANTQUE  */
+    FAIRE = 266,                   /* FAIRE  */
+    AFFICHE = 267,                 /* AFFICHE  */
+    LIRE = 268,                    /* LIRE  */
+    ASSIGN = 269,                  /* ASSIGN  */
+    EQ = 270,                      /* EQ  */
+    NEQ = 271,                     /* NEQ  */
+    LE = 272,                      /* LE  */
+    GE = 273,                      /* GE  */
+    ET = 274,                      /* ET  */
+    OU = 275,                      /* OU  */
+    NON = 276,                     /* NON  */
+    cstflt = 277,                  /* cstflt  */
+    cstint = 278,                  /* cstint  */
+    idf = 279,                     /* idf  */
+    TEXTV = 280,                   /* TEXTV  */
+    COMMENT = 281,                 /* COMMENT  */
+    COMMENTM = 282,                /* COMMENTM  */
+    NUM = 283,                     /* NUM  */
+    REAL = 284,                    /* REAL  */
+    TEXT = 285                     /* TEXT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -95,13 +90,17 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "syntaxique/syntax.y"
+#line 20 "src/syntax/syntax.y"
 
     int entier;
     float reel;
     char *str;
+    char *strv;
+    struct listeD *symbole;
+    struct listeT *symbol;
+    struct constant *con;
 
-#line 105 "syntax.tab.h"
+#line 104 "src/syntax/syntax.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -116,4 +115,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_SYNTAX_TAB_H_INCLUDED  */
+#endif /* !YY_YY_SRC_SYNTAX_SYNTAX_TAB_H_INCLUDED  */

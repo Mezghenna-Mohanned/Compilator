@@ -1,6 +1,6 @@
 %{
-#include "syntax.tab.h"
-#include "ts.h"
+#include "syntax.tab.h"    /* Will be found using -Isrc/syntax */
+#include "ts.h"            /* Will be found using -Isrc/include */
 extern YYSTYPE yylval;
 int nb_ligne=1;
 int col=1;
