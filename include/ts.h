@@ -3,35 +3,35 @@
 #include <string.h>
 
 typedef struct listeD {
-    char* entite;
-    char* type;
+    char *entite;
+    char *type;
     int is_const;
-    union {
+    union {          // YAAAW HEDI MCHI UNION TE3 BISON
         int i;
         float f;
-        char* s;
+        char *s;
     } valeur;
-    struct listeD* suivant;
+    struct listeD *suivant;
 } listeD;
 
 typedef struct listeT {
-    char* entite;
-    char* type;
+    char *entite;
+    char *type;
     int taille;
     union {
         int i;
         float f;
-        char* s;
+        char *s;
     } valeur;
-    struct listeT* suivant;
+    struct listeT *suivant;
 } listeT;
 
-extern listeD* TS;
-extern listeT* TStab;
+extern listeD *TS;
+extern listeT *TStab;
 
 typedef struct liste {
-    char* entite;
-    struct liste* suivant;
+    char *entite;
+    struct liste *suivant;
 } liste;
 
 #define RESET   "\033[0m"
@@ -41,11 +41,11 @@ typedef struct liste {
 #define CYAN    "\033[1;36m"
 #define MAGENTA "\033[1;35m"
 
-void afficherListe(const char* titre, liste* tete) {
+void afficherListe(const char *titre, liste *tete) {
     printf(CYAN "╭─────────────────────────────────────────────╮\n" RESET);
     printf(CYAN "│ " GREEN "%-43s" CYAN " │\n", titre);
     printf(CYAN "├─────────────────────────────────────────────┤\n" RESET);
-    liste* current = tete;
+    liste *current = tete;
     while (current != NULL) {
         printf(CYAN "│ " YELLOW "%-43s" CYAN " │\n", current->entite);
         current = current->suivant;
