@@ -1,16 +1,16 @@
 %{
-#include "syntax.tab.h"    /* Will be found using -Isrc/syntax */
-#include "ts.h"            /* Will be found using -Isrc/include */
+#include "syntax.tab.h"
+#include "semantique.h"
 extern YYSTYPE yylval;
-int nb_ligne=1;
-int col=1;
+int nb_ligne = 1;
+int col = 1;
 %}
 
-lettre [a-zA-Z]
-chiffre [0-9]
-idf {lettre}({lettre}|{chiffre}|_)* 
-cstflt [+-]?([0-9]*\.[0-9]+|[0-9]+\.) 
-cstint [+-]?[0-9]+
+lettre    [a-zA-Z]
+chiffre   [0-9]
+idf       {lettre}({lettre}|{chiffre}|_)*
+cstflt    [+-]?([0-9]*\.[0-9]+|[0-9]+\.)
+cstint    [+-]?[0-9]+
 
 %%
 
@@ -43,7 +43,7 @@ cstint [+-]?[0-9]+
     return AFFICHE; 
 }
 "lire" { 
-   insererMotCle("lire"); 
+    insererMotCle("lire"); 
     return LIRE; 
 }
 
@@ -85,7 +85,7 @@ cstint [+-]?[0-9]+
     return OU; 
 }
 "NON" { 
-    insererOperateurLogique("NON"); 
+    insererOperateurLogique("NON");  
     return NON; 
 }
 
@@ -142,7 +142,7 @@ cstint [+-]?[0-9]+
     yylval.entier = atoi(yytext);
     if (yylval.entier < -32767 || yylval.entier > 32767) {
        printf("\033[34mErreur lexicale : entier en dehors de cet intervalle [-32767, 32767]\033[0m\n");
-        return -1;
+       return -1;
     }
     return cstint;
 } 
@@ -161,11 +161,11 @@ cstint [+-]?[0-9]+
         return idf;
     }
 }
-\n { nb_ligne++; col = 1; }
-[ \t] {col++;}
+\n       { nb_ligne++; col = 1; }
+[ \t]   { col++; }
 
 \"[^\"]*\" { yylval.strv = strdup(yytext); return TEXTV; }
---.*?## { yylval.str = strdup(yytext); return COMMENT; }
+--.*?##   { yylval.str = strdup(yytext); return COMMENT; }
 \{-([^-]|-[^}])*-\} { 
     char *p;
     for (p = yytext; *p != '\0'; p++) {
@@ -181,7 +181,7 @@ cstint [+-]?[0-9]+
 }
 
 . { 
-    printf("Erreur lexicale sur l'entité %s à la ligne %d à la colonne %d\n", yytext, nb_ligne, col); 
+    printf("Erreur lexicale sur l'entité %s à la ligne %d, colonne %d\n", yytext, nb_ligne, col); 
     return -1; 
 }
 

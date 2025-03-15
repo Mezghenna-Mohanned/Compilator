@@ -44,6 +44,12 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 15 "src/syntax/syntax.y"
+
+  #include "include/ts.h"
+
+#line 53 "src/syntax/syntax.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -90,17 +96,17 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "src/syntax/syntax.y"
+#line 19 "src/syntax/syntax.y"
 
     int entier;
     float reel;
     char *str;
     char *strv;
-    struct listeD *symbole;
-    struct listeT *symbol;
-    struct constant *con;
+    listeD *symbole;
+    listeT *symbol;
+    constant *con;
 
-#line 104 "src/syntax/syntax.tab.h"
+#line 110 "src/syntax/syntax.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
