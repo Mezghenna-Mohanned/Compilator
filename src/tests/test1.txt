@@ -1,79 +1,38 @@
-DEBUT
+MainPrgm myProgram1 ;
+Var
+  let x,y,z : Int ;
+  let A,B : [Int;10];
+  @define Const Pi : Float = 3.14 ;
+  @define Const MAX : Int = 100 ;
 
--- Declaration de Variable ##
-NUM : x , y , z , i ;
-REAL : a , b , c , div; -- REAL ##
-TEXT : text , new_text ;
+BeginPg
+{
+  x := 5;
+  y := 10;
+  z := x + y;        /* z = 15 */
 
--- double déclaration ##
-NUM : x ;
+  output(x);
+  output(y);
+  output(z);
 
+  A[3] := x;
+  B[9] := y;
+  output(A[3]);
+  output(B[9]);
 
-{-
-Déclaration des constantes
--}
+  /* Check out-of-bounds (should produce error if we handle it strictly) */
+  A[10] := 99;  <!- This index is out of bounds -!>
 
-FIXE REAL : MATH_PI = 3.14 ;
-FIXE NUM : num = 3 ;
-FIXE TEXT : phrase = "Software" ;
+  /* Constant re-assignment (should cause error if the code checks properly) */
+  Pi := 4.0; <!- Not allowed, Pi is const -!>
 
--- declarations des tableaux ##
-NUM : tab[30] , tableau[10];
+  /* Simple if/else */
+  if (z > 10) then {
+    output("z > 10");
+  } else {
+    output("z <= 10");
+  }
 
--- 1 ere erreur lexical ##
-{- NUM : Un_Long_Nom_De_Variable ; -}
-
-
-
-EXECUTION {
-
-
-{-
-division par 0
--}
-x <- 3 ; 
-y <- 2 * x ;
-z <- 3 ; 
-a <- 1.5 ;
-div <- a / ((x + y) - (3 * z));
-
-
-a <- x ;  -- on peut assigner un entier à un reel ##
-
-
-
--- 2eme erreur lexical ##
-{- x <- 400000 ; -}
-
-
--- variable non déclaré + essaye de calcule un type text ##
-var <- text + y;
-
-
-{- depassement de capacité pour un tableau -}
-lire(tab[35]);
-tableau[13] <- x ; 
--- d'autre erreur conserant les tableaux ##
-
-lire(tab[indice]);
-b <- 3.5 ; 
-tableau[b] <- b ;
-i <- 13 ; 
-lire(tableau[i]) ;
-
--- icompatibilité des types ##
-x <- a ; 
-b <- text ; 
-
-text <- "Mohanned and Nesrine" ; 
-new_text <- text ; -- affectation d'un type text à un autre marche sans probleme ##
-
-
--- modification d'un constante ## 
-MATH_PI <- 4 ; 
-num <- num + 1 ; 
-
-
-
+  x := (x + y) * (z - 2);
 }
-FIN
+EndPg ;

@@ -60,34 +60,37 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    DEBUT = 258,                   /* DEBUT  */
-    FIN = 259,                     /* FIN  */
-    EXECUTION = 260,               /* EXECUTION  */
-    FIXE = 261,                    /* FIXE  */
-    SI = 262,                      /* SI  */
-    ALORS = 263,                   /* ALORS  */
-    SINON = 264,                   /* SINON  */
-    TANTQUE = 265,                 /* TANTQUE  */
-    FAIRE = 266,                   /* FAIRE  */
-    AFFICHE = 267,                 /* AFFICHE  */
-    LIRE = 268,                    /* LIRE  */
-    ASSIGN = 269,                  /* ASSIGN  */
-    EQ = 270,                      /* EQ  */
-    NEQ = 271,                     /* NEQ  */
-    LE = 272,                      /* LE  */
-    GE = 273,                      /* GE  */
-    ET = 274,                      /* ET  */
-    OU = 275,                      /* OU  */
-    NON = 276,                     /* NON  */
-    cstflt = 277,                  /* cstflt  */
-    cstint = 278,                  /* cstint  */
-    idf = 279,                     /* idf  */
-    TEXTV = 280,                   /* TEXTV  */
-    COMMENT = 281,                 /* COMMENT  */
-    COMMENTM = 282,                /* COMMENTM  */
-    NUM = 283,                     /* NUM  */
-    REAL = 284,                    /* REAL  */
-    TEXT = 285                     /* TEXT  */
+    MAINPRGM = 258,                /* MAINPRGM  */
+    VAR = 259,                     /* VAR  */
+    BEGINPG = 260,                 /* BEGINPG  */
+    ENDPG = 261,                   /* ENDPG  */
+    LET = 262,                     /* LET  */
+    DEFINE = 263,                  /* DEFINE  */
+    CONSTTK = 264,                 /* CONSTTK  */
+    IF = 265,                      /* IF  */
+    THEN = 266,                    /* THEN  */
+    ELSE = 267,                    /* ELSE  */
+    DO = 268,                      /* DO  */
+    WHILE = 269,                   /* WHILE  */
+    FOR = 270,                     /* FOR  */
+    FROM = 271,                    /* FROM  */
+    TO = 272,                      /* TO  */
+    STEP = 273,                    /* STEP  */
+    INPUT = 274,                   /* INPUT  */
+    OUTPUT = 275,                  /* OUTPUT  */
+    INTCST = 276,                  /* INTCST  */
+    FLOATCST = 277,                /* FLOATCST  */
+    IDF = 278,                     /* IDF  */
+    INT_TYPE = 279,                /* INT_TYPE  */
+    FLOAT_TYPE = 280,              /* FLOAT_TYPE  */
+    ASSIGN = 281,                  /* ASSIGN  */
+    LE = 282,                      /* LE  */
+    GE = 283,                      /* GE  */
+    EQ = 284,                      /* EQ  */
+    NEQ = 285,                     /* NEQ  */
+    AND = 286,                     /* AND  */
+    OR = 287,                      /* OR  */
+    NOT = 288                      /* NOT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -96,17 +99,16 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 19 "src/syntax/syntax.y"
+#line 20 "src/syntax/syntax.y"
 
-    int entier;
-    float reel;
-    char *str;
-    char *strv;
+    int    entier;
+    float  reel;
+    char  *str;
     listeD *symbole;
     listeT *symbol;
     constant *con;
 
-#line 110 "src/syntax/syntax.tab.h"
+#line 112 "src/syntax/syntax.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

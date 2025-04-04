@@ -9,7 +9,7 @@
 #define MAX_TYPE_LENGTH 50
 
 typedef struct constant {
-    char type[MAX_TYPE_LENGTH];
+    char type[MAX_TYPE_LENGTH]; 
     union {
         int i;
         float f;
@@ -20,7 +20,7 @@ typedef struct constant {
 typedef struct listeD {
     char *entite;
     char *type;
-    int is_const;
+    int is_const; /* 1 if it's a constant, 0 otherwise */
     union {
         int i;
         float f;
@@ -41,7 +41,7 @@ typedef struct listeT {
     struct listeT *suivant;
 } listeT;
 
-extern listeD *TS;
-extern listeT *TStab;
+extern listeD *TS;    /* Variables and constants */
+extern listeT *TStab; /* Arrays */
 
 #endif

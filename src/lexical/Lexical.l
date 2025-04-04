@@ -6,183 +6,127 @@ int nb_ligne = 1;
 int col = 1;
 %}
 
-lettre    [a-zA-Z]
-chiffre   [0-9]
-idf       {lettre}({lettre}|{chiffre}|_)*
-cstflt    [+-]?([0-9]*\.[0-9]+|[0-9]+\.)
-cstint    [+-]?[0-9]+
+
+letter        [a-zA-Z]
+digit         [0-9]
+tail          ({letter}|{digit}|_){0,13}
+good_idf      {letter}{tail}
+
+int_pat       [0-9]+
+float_pat     [0-9]*\.[0-9]+
+
+assign_op     ":="
 
 %%
 
-"FIXE" { 
-    insererMotCle("FIXE");
-    return FIXE;
-}
-"SI" {
-    insererMotCle("SI"); 
-    return SI; 
-}
-"ALORS" { 
-    insererMotCle("ALORS"); 
-    return ALORS; 
-}
-"SINON" { 
-    insererMotCle("SINON"); 
-    return SINON; 
-}
-"TANTQUE" { 
-    insererMotCle("TANTQUE"); 
-    return TANTQUE; 
-}
-"FAIRE" { 
-    insererMotCle("FAIRE"); 
-    return FAIRE; 
-}
-"affiche" { 
-    insererMotCle("affiche"); 
-    return AFFICHE; 
-}
-"lire" { 
-    insererMotCle("lire"); 
-    return LIRE; 
-}
+"MainPrgm"          { insererKeyword("MainPrgm"); return MAINPRGM; }
+"Var"               { insererKeyword("Var");       return VAR; }
+"BeginPg"           { insererKeyword("BeginPg");   return BEGINPG; }
+"EndPg"             { insererKeyword("EndPg");     return ENDPG; }
+"let"               { insererKeyword("let");       return LET; }
+"Int"               { return INT_TYPE; }
+"Float"             { return FLOAT_TYPE; }
 
-"<-" { 
-    insererOperateurNoAsso("<-"); 
-    return ASSIGN; 
-}
-"=" { 
-    insererOperateurNoAsso("="); 
-    return EQ; 
-}
-"!=" { 
-    insererOperateurNoAsso("!="); 
-    return NEQ; 
-}
-"<=" { 
-    insererOperateurNoAsso("<="); 
-    return LE; 
-}
-">=" { 
-    insererOperateurNoAsso(">="); 
-    return GE; 
-}
-"<" { 
-    insererOperateurNoAsso("<"); 
-    return '<'; 
-}
-">" { 
-    insererOperateurNoAsso(">"); 
-    return '>'; 
-}
 
-"ET" { 
-    insererOperateurLogique("ET");  
-    return ET; 
-}
-"OU" { 
-    insererOperateurLogique("OU");  
-    return OU; 
-}
-"NON" { 
-    insererOperateurLogique("NON");  
-    return NON; 
-}
+"@define"           { insererKeyword("@define");   return DEFINE; }
+"Const"             { insererKeyword("Const");     return CONSTTK; }
 
-"+" { 
-    insererOperateurArithmetique("+"); 
-    return '+'; 
-}
-"-" { 
-    insererOperateurArithmetique("-"); 
-    return '-'; 
-}
-"*" { 
-    insererOperateurArithmetique("*"); 
-    return '*'; 
-}
-"/" { 
-    insererOperateurArithmetique("/"); 
-    return '/'; 
-}
+"if"                { insererKeyword("if");        return IF; }
+"then"              { insererKeyword("then");      return THEN; }
+"else"              { insererKeyword("else");      return ELSE; }
 
-"DEBUT" { 
-    insererMotCle("DEBUT"); 
-    return DEBUT; 
-}
-"FIN" { 
-    insererMotCle("FIN"); 
-    return FIN; 
-}
-"EXECUTION" { 
-    insererMotCle("EXECUTION"); 
-    return EXECUTION; 
-}
-"NUM" { 
-    return NUM; 
-}
-"REAL" { 
-    return REAL; 
-}
-"TEXT" { 
-    return TEXT; 
-}
+"do"                { insererKeyword("do");        return DO; }
+"while"             { insererKeyword("while");     return WHILE; }
 
-"{" { return '{'; }
-"}" { return '}'; }
-"(" { return '('; }
-")" { return ')'; }
-"[" { return '['; }
-"]" { return ']'; }
-";" { return ';'; }
-":" { return ':'; }
-"," { return ','; }
+"for"               { insererKeyword("for");       return FOR; }
+"from"              { insererKeyword("from");      return FROM; }
+"to"                { insererKeyword("to");        return TO; }
+"step"              { insererKeyword("step");      return STEP; }
 
-{cstint} { 
-    yylval.entier = atoi(yytext);
-    if (yylval.entier < -32767 || yylval.entier > 32767) {
-       printf("\033[34mErreur lexicale : entier en dehors de cet intervalle [-32767, 32767]\033[0m\n");
-       return -1;
-    }
-    return cstint;
-} 
+"input"             { insererKeyword("input");     return INPUT; }
+"output"            { insererKeyword("output");    return OUTPUT; }
 
-{cstflt} { 
-    yylval.reel = atof(yytext); 
-    return cstflt; 
+"\\+"               { insererOperator("+"); return '+'; }
+"-"                 { insererOperator("-"); return '-'; }
+"\\*"               { insererOperator("*"); return '*'; }
+"/"                 { insererOperator("/"); return '/'; }
+
+"<="                { insererCompareOp("<="); return LE; }
+">="                { insererCompareOp(">="); return GE; }
+"=="                { insererCompareOp("=="); return EQ; }
+"!="                { insererCompareOp("!="); return NEQ; }
+"<"                 { insererCompareOp("<");  return '<'; }
+">"                 { insererCompareOp(">");  return '>'; }
+
+"AND"               { insererLogicOp("AND"); return AND; }
+"OR"                { insererLogicOp("OR");  return OR; }
+"!"                 { insererLogicOp("!");   return NOT; }
+
+{assign_op}         { return ASSIGN; }
+
+"("    { return '('; }
+")"    { return ')'; }
+"{"    { return '{'; }
+"}"    { return '}'; }
+"["    { return '['; }
+"]"    { return ']'; }
+";"    { return ';'; }
+":"    { return ':'; }
+","    { return ','; }
+
+"="    { return '='; }
+
+
+"<!-".*"-!>" {
 }
-
-{idf} { 
-    if (strlen(yytext) > 10) {
-        printf("\033[34mErreur lexicale : l'identifiant '%s' dépasse la limite de 10 caractères à la ligne %d, colonne %d\033[0m\n", yytext, nb_ligne, col);
-        return -1; 
-    } else {
-        yylval.str = strdup(yytext);
-        return idf;
-    }
-}
-\n       { nb_ligne++; col = 1; }
-[ \t]   { col++; }
-
-\"[^\"]*\" { yylval.strv = strdup(yytext); return TEXTV; }
---.*?##   { yylval.str = strdup(yytext); return COMMENT; }
-\{-([^-]|-[^}])*-\} { 
+"{--"([^-]|-+[^-])*"--}" {
     char *p;
-    for (p = yytext; *p != '\0'; p++) {
-        if (*p == '\n') {
-            nb_ligne++;
-            col = 1;
-        } else {
-            col++;
-        }
+    for (p = yytext; *p; p++) {
+        if (*p == '\n') { nb_ligne++; col = 1; } 
+        else { col++; }
     }
-    yylval.str = strdup(yytext); 
-    return COMMENTM; 
 }
 
-. { 
-    printf("Erreur lexicale sur l'entité %s à la ligne %d, colonne %d\n", yytext, nb_ligne, col); 
-    return -1; 
+"\\(""?[+-]?{int_pat}\\)" {
+    int val = atoi(yytext+1);
+    yylval.entier = val;
+    return INTCST;
+}
+
+"\\(""?[+-]?{float_pat}\\)" {
+    float val = atof(yytext+1);
+    yylval.reel = val;
+    return FLOATCST;
+}
+
+{int_pat} {
+    int val = atoi(yytext);
+    yylval.entier = val;
+    return INTCST;
+}
+
+{float_pat} {
+    float val = atof(yytext);
+    yylval.reel = val;
+    return FLOATCST;
+}
+
+{good_idf} {
+    if ((yytext[strlen(yytext)-1] == '_') || (strstr(yytext,"__")!=NULL)) {
+        fprintf(stderr,"Erreur lexicale (identifiant invalide) '%s' ligne %d, col %d\n", yytext, nb_ligne, col);
+        return -1;
+    }
+    yylval.str = strdup(yytext);
+    return IDF;
+}
+
+[\t ]+  { col += yyleng; }
+
+\n      { nb_ligne++; col=1; }
+
+. {
+    fprintf(stderr,"Caractère invalide '%s' ligne %d, col %d\n", yytext, nb_ligne, col);
+    return -1;
 }
 
 %%
