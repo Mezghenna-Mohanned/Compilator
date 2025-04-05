@@ -1,38 +1,50 @@
-MainPrgm myProgram1 ;
+MainPrgm StatsProg ;
 Var
-  let x,y,z : Int ;
-  let A,B : [Int;10];
-  @define Const Pi : Float = 3.14 ;
-  @define Const MAX : Int = 100 ;
+    let i , a , b , c : Int ;
+    let sum , avg : Float ;
+    let nums[10] : Int ;
+    let vals[5] , ratios[5] : Float ;
+    @define Const Pi    : Float = 3.1416 ;
+    @define Const Limit : Int   = 10 ;
 
 BeginPg
 {
-  x := 5;
-  y := 10;
-  z := x + y;        /* z = 15 */
+    a := 1 ;
+    b := 2 ;
+    c := a + b * 3 ;
 
-  output(x);
-  output(y);
-  output(z);
+    {-- Fill nums array --}
+    for i from 0 to 9 step 1 {
+        nums[i] := i + 1 ;
+    }
 
-  A[3] := x;
-  B[9] := y;
-  output(A[3]);
-  output(B[9]);
+    sum := 0 ;
+    for i from 0 to 9 step 1 {
+        sum := sum + nums[i] ;
+    }
 
-  /* Check out-of-bounds (should produce error if we handle it strictly) */
-  A[10] := 99;  <!- This index is out of bounds -!>
+    if (Limit != 0) then {
+        avg := sum / Limit ;
+    } else {
+        avg := 0 ;
+    }
 
-  /* Constant re-assignment (should cause error if the code checks properly) */
-  Pi := 4.0; <!- Not allowed, Pi is const -!>
+    output("Average: ") ;
+    output(avg) ;
 
-  /* Simple if/else */
-  if (z > 10) then {
-    output("z > 10");
-  } else {
-    output("z <= 10");
-  }
+    for i from 0 to 4 step 1 {
+        vals[i]   := (i + 1) * 2.5 ;
+        ratios[i] := vals[i] / Pi ;
+    }
 
-  x := (x + y) * (z - 2);
+    {-- display arrays --}
+    for i from 0 to 4 step 1 {
+        output(vals[i]) ;
+        output(ratios[i]) ;
+    }
+
+    do {
+        a := a + 1 ;
+    } while (a < 5) ;
 }
 EndPg ;

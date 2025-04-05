@@ -46,21 +46,23 @@ assign_op     ":="
 "input"             { insererKeyword("input");     return INPUT; }
 "output"            { insererKeyword("output");    return OUTPUT; }
 
-"\\+"               { insererOperator("+"); return '+'; }
-"-"                 { insererOperator("-"); return '-'; }
-"\\*"               { insererOperator("*"); return '*'; }
-"/"                 { insererOperator("/"); return '/'; }
+"+"   { insererOperator("+"); return '+'; }
+"-"   { insererOperator("-"); return '-'; }
+"*"   { insererOperator("*"); return '*'; }
+"/"   { insererOperator("/"); return '/'; }
 
-"<="                { insererCompareOp("<="); return LE; }
-">="                { insererCompareOp(">="); return GE; }
-"=="                { insererCompareOp("=="); return EQ; }
-"!="                { insererCompareOp("!="); return NEQ; }
-"<"                 { insererCompareOp("<");  return '<'; }
-">"                 { insererCompareOp(">");  return '>'; }
 
-"AND"               { insererLogicOp("AND"); return AND; }
-"OR"                { insererLogicOp("OR");  return OR; }
-"!"                 { insererLogicOp("!");   return NOT; }
+"<="  { insererCompareOp("<="); return LE; }
+">="  { insererCompareOp(">="); return GE; }
+"=="  { insererCompareOp("=="); return EQ; }
+"!="  { insererCompareOp("!="); return NEQ; }
+"<"   { insererCompareOp("<");  return '<'; }
+">"   { insererCompareOp(">");  return '>'; }
+
+"AND" { insererLogicOp("AND"); return AND; }
+"OR"  { insererLogicOp("OR");  return OR; }
+"!"   { insererLogicOp("!");   return NOT; }
+
 
 {assign_op}         { return ASSIGN; }
 
