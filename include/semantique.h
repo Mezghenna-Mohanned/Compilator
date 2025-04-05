@@ -7,25 +7,18 @@
 #include "ts.h"
 #include "color.h"
 
-/* Externs for functions used in parser/lexer */
 extern void yyerror(const char *s);
 extern int insererTableVar(char entite[], char type[], void *valeur);
 extern int insererTableTab(char entite[], char type[], int taille, void *valeur);
 extern listeD *chercherTS(char nom[]);
 extern int chercherTailleTab(char tete[]);
 
-/* The 4 insertion/logging functions called by lexical.l */
 void insererKeyword(const char* kw);
 void insererOperator(const char* op);
 void insererCompareOp(const char* op);
 void insererLogicOp(const char* op);
 
-/* 
- * Inline helper functions for semantic checks.
- * Keep them in semantique.h so the parser can call them directly.
- */
 
-/* Insert a list of variables into TS, checking for double declaration. */
 static inline void insertionTS_et_verif_double_declaration(listeD *l, char type[]) {
     listeD *var;
     for (var = l; var != NULL; var = var->suivant) {
@@ -35,7 +28,6 @@ static inline void insertionTS_et_verif_double_declaration(listeD *l, char type[
     }
 }
 
-/* Insert a list of arrays into TStab, checking for double declaration. */
 static inline void insertionTStab_et_verif_double_declaration(listeT *l, char type[]) {
     listeT *var;
     for (var = l; var != NULL; var = var->suivant) {
@@ -45,7 +37,6 @@ static inline void insertionTStab_et_verif_double_declaration(listeT *l, char ty
     }
 }
 
-/* Create a singly linked list node for a simple variable declaration. */
 static inline listeD *creationVarlist1(char *tete, listeD *l) {
     listeD *new_var = (listeD *)malloc(sizeof(listeD));
     new_var->entite = strdup(tete);
@@ -55,7 +46,6 @@ static inline listeD *creationVarlist1(char *tete, listeD *l) {
     return new_var;
 }
 
-/* Create a singly linked list node for an array declaration. */
 static inline listeT *creationVarlist2(char *tete, int taille, listeT *l) {
     listeT *new_var = (listeT *)malloc(sizeof(listeT));
     new_var->entite = strdup(tete);
@@ -65,7 +55,6 @@ static inline listeT *creationVarlist2(char *tete, int taille, listeT *l) {
     return new_var;
 }
 
-/* For constants declared with @define Const ... */
 static inline listeD *constDeclaration(constant *p, char *tete, int hasValue) {
     listeD *new_var = (listeD *)malloc(sizeof(listeD));
     new_var->entite = strdup(tete);
@@ -84,7 +73,6 @@ static inline listeD *constDeclaration(constant *p, char *tete, int hasValue) {
     return new_var;
 }
 
-/* Check assignment errors: reassigning const, type mismatch, etc. */
 static inline void gestionErreurAssig(constant *p, char *tete) {
     listeD *var = chercherTS(tete);
     if (var == NULL) {
@@ -220,8 +208,6 @@ static inline void gestion_io_statement(int isArray, char *tete, int index) {
         }
     }
 }
-
-/* Return the constant (type + value) that an IDF currently holds in TS. */
 static inline constant *gestionIDF(char *tete) {
     listeD *var = chercherTS(tete);
     constant *variable = (constant *)malloc(sizeof(constant));
@@ -242,7 +228,6 @@ static inline constant *gestionIDF(char *tete) {
     return variable;
 }
 
-/* For A[idx], ensure idx is an Int and within array bounds. */
 static inline void gererTaille(char *teteTableau, char *idxName) {
     listeD *var = chercherTS(idxName);
     if (var == NULL) {

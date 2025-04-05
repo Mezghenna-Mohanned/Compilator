@@ -93,13 +93,13 @@ declaration:
     /* Arrays */
     | LET var_list2 ':' type ';'
       {
-        /* Fix: We reference $2 (the var_list2) instead of $1 (the LET token). */
+        /* Fix: We reference $2 (the var_list2) instead of $1 (the LET token) */
         insertionTStab_et_verif_double_declaration($2, $4);
       }
     /* Constants */
     | DEFINE CONSTTK const_declaration ';'
       { 
-        /* Insert the newly built constant into the TS. */
+        /* Insert the newly built constant into the TS */
         insertionTS_et_verif_double_declaration($3, $3->type ? $3->type : "Int");
       }
     ;
@@ -116,7 +116,7 @@ var_list:
       }
     ;
 
-/* For array declarations, e.g. let A,B : [Int; 10]; now changed to your mini-syntax. */
+/* For array declarations, e.g. let A,B : [Int; 10]; now changed to your mini-syntax */
 var_list2:
       var_list2 ',' IDF '[' INTCST ']'
       {
@@ -128,7 +128,7 @@ var_list2:
       }
     ;
 
-/* @define Const Pi : Float = 3.14 ; => We store it in 'const_declaration'. */
+/* @define Const Pi : Float = 3.14 ; => We store it in 'const_declaration' */
 const_declaration:
     IDF ':' type '=' constant_value
     {
@@ -167,7 +167,7 @@ statement:
     | forstatement
     ;
 
-/* assignment => IDF := expression or IDF[index] := expression, etc. */
+/* assignment => IDF := expression or IDF[index] := expression, etc */
 assignment:
     IDF ASSIGN expression
     {
@@ -176,12 +176,11 @@ assignment:
     | IDF '[' INTCST ']' ASSIGN expression
     {
       gestion_taille_tableau($1, $3);
-      /* If the expression is valid, store it or do something. */
+      /* If the expression is valid, store it or do something */
     }
     | IDF '[' IDF ']' ASSIGN expression
     {
       gererTaille($1, $3);
-      /* same note as above. */
     }
     ;
 
