@@ -18,7 +18,6 @@ void insererOperator(const char* op);
 void insererCompareOp(const char* op);
 void insererLogicOp(const char* op);
 
-
 static inline void insertionTS_et_verif_double_declaration(listeD *l, char type[]) {
     listeD *var;
     for (var = l; var != NULL; var = var->suivant) {
@@ -80,7 +79,6 @@ static inline void gestionErreurAssig(constant *p, char *tete) {
     } else if (var->is_const == 1) {
         yyerror("Tentative de modification d'une constante");
     } else {
-        /* Same type => copy.  If Int->Float or Float->Int, decide how to handle. */
         if (var->type && strcmp(var->type, p->type) == 0) {
             if (strcmp(var->type, "Int") == 0) {
                 var->valeur.i = p->valeur.i;
@@ -100,7 +98,6 @@ static inline void gestionErreurAssig(constant *p, char *tete) {
     free(p);
 }
 
-/* Check array index bounds. */
 static inline void gestion_taille_tableau(char *tete, int indice) {
     int taille = chercherTailleTab(tete);
     if (taille == -1) {
@@ -110,7 +107,6 @@ static inline void gestion_taille_tableau(char *tete, int indice) {
     }
 }
 
-/* For arithmetic ops: int->int, float->float, int/float combos, etc. */
 static inline constant *gestionErreurType(int op, constant *exp1, constant *exp2) {
     constant *res = (constant *)malloc(sizeof(constant));
     if (!res) {
@@ -119,7 +115,6 @@ static inline constant *gestionErreurType(int op, constant *exp1, constant *exp2
     }
     strcpy(res->type, "");
 
-    /* Both Int? */
     if (strcmp(exp1->type, "Int") == 0 && strcmp(exp2->type, "Int") == 0) {
         strcpy(res->type, "Int");
         int left = exp1->valeur.i;
@@ -131,16 +126,21 @@ static inline constant *gestionErreurType(int op, constant *exp1, constant *exp2
             case 4:
                 if (right == 0) {
                     yyerror("Division par zéro (entier)");
+                    free(res);
+                    return NULL;
                 } else {
                     res->valeur.i = left / right;
                 }
                 break;
+            default:
+                yyerror("Operateur arithmetique inconnu");
+                free(res);
+                return NULL;
         }
     }
-    /* Float combos? */
     else if ((strcmp(exp1->type, "Float") == 0 && strcmp(exp2->type, "Float") == 0) ||
              (strcmp(exp1->type, "Int") == 0 && strcmp(exp2->type, "Float") == 0) ||
-             (strcmp(exp1->type, "Float") == 0 && strcmp(exp2->type, "Int") == 0)) 
+             (strcmp(exp1->type, "Float") == 0 && strcmp(exp2->type, "Int") == 0))
     {
         strcpy(res->type, "Float");
         float left = (strcmp(exp1->type, "Int") == 0) ? (float)exp1->valeur.i : exp1->valeur.f;
@@ -151,21 +151,27 @@ static inline constant *gestionErreurType(int op, constant *exp1, constant *exp2
             case 3: res->valeur.f = left * right; break;
             case 4:
                 if (right == 0.0) {
-                    yyerror("Division par zéro (réel)");
+                    yyerror("Division par zero (réel)");
+                    free(res);
+                    return NULL;
                 } else {
                     res->valeur.f = left / right;
                 }
                 break;
+            default:
+                yyerror("Operateur arithmetique inconnu");
+                free(res);
+                return NULL;
         }
-    } 
-    else {
-        yyerror("Opération arithmétique non supportée pour ces types");
+    } else {
+        yyerror("Operation arithmetique non supportee pour ces types");
+        free(res);
+        return NULL;
     }
 
     return res;
 }
 
-/* For <, >, <=, >=. Make sure both are numeric. */
 static inline void gestionIncompatibilite(constant *exp1, constant *exp2) {
     if (exp1 == NULL || exp2 == NULL) {
         yyerror("Expression invalide dans la condition");
@@ -177,7 +183,6 @@ static inline void gestionIncompatibilite(constant *exp1, constant *exp2) {
     }
 }
 
-/* For ==, !=. Check both numeric. */
 static inline void gestionIncompatibiliteEQ_NEQ(constant *exp1, constant *exp2) {
     if (!exp1 || !exp2) {
         yyerror("Expression invalide dans la condition");
@@ -187,13 +192,12 @@ static inline void gestionIncompatibiliteEQ_NEQ(constant *exp1, constant *exp2) 
         (strcmp(exp1->type, "Int") == 0 || strcmp(exp1->type, "Float") == 0) &&
         (strcmp(exp2->type, "Int") == 0 || strcmp(exp2->type, "Float") == 0)
     ) {
-        /* OK, do nothing special. */
+        /* OK */
     } else {
         yyerror("Types incompatibles pour la comparaison d'égalité");
     }
 }
 
-/* For input(...), output(...). Check if array, or normal var. */
 static inline void gestion_io_statement(int isArray, char *tete, int index) {
     if (!isArray) {
         if (chercherTS(tete) == NULL) {
@@ -208,6 +212,7 @@ static inline void gestion_io_statement(int isArray, char *tete, int index) {
         }
     }
 }
+
 static inline constant *gestionIDF(char *tete) {
     listeD *var = chercherTS(tete);
     constant *variable = (constant *)malloc(sizeof(constant));

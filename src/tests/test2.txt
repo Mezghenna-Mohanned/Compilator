@@ -5,24 +5,20 @@ Var
   @define Const limit : Int = 3 ;
 BeginPg
 {
-  /* Using do { ... } while(...) */
   count := 0;
   do {
     output("Inside the do-while loop");
     count := count + 1;
   } while (count < limit);
 
-  /* for i from 0 to 4 step 1 { ... } */
   for i from 0 to 4 step 1 {
     arr[i] := i * 2;
   }
 
-  /* Print them out */
   for i from 0 to 4 step 1 {
     output(arr[i]);
   }
 
-  /* If we do array out-of-bounds => error */
   arr[10] := 999;  <!- Out of range -!>
 }
 EndPg ;
