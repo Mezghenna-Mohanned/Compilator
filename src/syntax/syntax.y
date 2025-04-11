@@ -1,5 +1,6 @@
 %{
 #include "include/semantique.h"
+extern int insererTableConst(char entite[], char type[], void *valeur);
 extern int yylex(void);
 extern int nb_ligne;
 extern int col;
@@ -93,21 +94,19 @@ declaration:
     /* Arrays */
     | LET var_list2 ':' type ';'
       {
-        /* Fix: We reference $2 (the var_list2) instead of $1 (the LET token) */
         insertionTStab_et_verif_double_declaration($2, $4);
       }
     /* Constants */
     | DEFINE CONSTTK const_declaration ';'
-      { 
-        /* Insert the newly built constant into the TS */
-        insertionTS_et_verif_double_declaration($3, $3->type ? $3->type : "Int");
+      {
+        if (insererTableConst($3->entite, $3->type, &($3->valeur)) == -1)
+            yyerror("Double déclaration");
       }
     ;
 
 var_list:
       var_list ',' IDF
       { 
-        /* Build a linked list of variable names */
         $$ = creationVarlist1($3, $1); 
       }
     | IDF
@@ -116,7 +115,6 @@ var_list:
       }
     ;
 
-/* For array declarations, e.g. let A,B : [Int; 10]; now changed to your mini-syntax */
 var_list2:
       var_list2 ',' IDF '[' INTCST ']'
       {
@@ -133,7 +131,6 @@ const_declaration:
     IDF ':' type '=' constant_value
     {
       $$ = constDeclaration($5, $1, 1);
-      /* set the type from $3 */
       $$->type = strdup($3);
     }
     | IDF ':' type
@@ -149,7 +146,6 @@ type:
     | FLOAT_TYPE { $$ = strdup("Float"); }
     ;
 
-/* block => { statements } */
 block:
     '{' statements '}'
     ;
@@ -167,7 +163,6 @@ statement:
     | forstatement
     ;
 
-/* assignment => IDF := expression or IDF[index] := expression, etc */
 assignment:
     IDF ASSIGN expression
     {
@@ -176,7 +171,6 @@ assignment:
     | IDF '[' INTCST ']' ASSIGN expression
     {
       gestion_taille_tableau($1, $3);
-      /* If the expression is valid, store it or do something */
     }
     | IDF '[' IDF ']' ASSIGN expression
     {
@@ -184,7 +178,6 @@ assignment:
     }
     ;
 
-/* expression => supports + - * /, parentheses, constants, IDF. */
 expression:
       expression '+' expression { $$ = gestionErreurType(1, $1, $3); }
     | expression '-' expression { $$ = gestionErreurType(2, $1, $3); }
@@ -212,23 +205,19 @@ constant_value:
       }
     ;
 
-/* if (condition) then block [ else block ] */
 conditional:
     IF '(' condition ')' THEN block ELSE block
     | IF '(' condition ')' THEN block
     ;
 
-/* do { block } while(condition) ; */
 loop:
     DO block WHILE '(' condition ')' ';'
     ;
 
-/* for i from expr to expr step expr block */
 forstatement:
     FOR IDF FROM expression TO expression STEP expression block
     ;
 
-/* condition => logical expressions or comparisons. */
 condition: condition_or;
 
 condition_or:
@@ -256,7 +245,6 @@ condition_comp:
     | '(' condition ')'
     ;
 
-/* iostatement => input(...), output(...). */
 iostatement:
       INPUT '(' ioparam ')'
     | OUTPUT '(' ioparam ')'

@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_SRC_SYNTAX_SYNTAX_TAB_H_INCLUDED
-# define YY_YY_SRC_SYNTAX_SYNTAX_TAB_H_INCLUDED
+#ifndef YY_YY_SYNTAX_TAB_H_INCLUDED
+# define YY_YY_SYNTAX_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -45,11 +45,11 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 15 "src/syntax/syntax.y"
+#line 16 "syntax.y"
 
   #include "include/ts.h"
 
-#line 53 "src/syntax/syntax.tab.h"
+#line 53 "syntax.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -99,7 +99,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "src/syntax/syntax.y"
+#line 21 "syntax.y"
 
     int    entier;
     float  reel;
@@ -108,7 +108,7 @@ union YYSTYPE
     listeT *symbol;
     constant *con;
 
-#line 112 "src/syntax/syntax.tab.h"
+#line 112 "syntax.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -123,4 +123,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_SRC_SYNTAX_SYNTAX_TAB_H_INCLUDED  */
+#endif /* !YY_YY_SYNTAX_TAB_H_INCLUDED  */

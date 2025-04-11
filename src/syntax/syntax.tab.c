@@ -67,9 +67,10 @@
 
 
 /* First part of user prologue.  */
-#line 1 "src/syntax/syntax.y"
+#line 1 "syntax.y"
 
 #include "include/semantique.h"
+extern int insererTableConst(char entite[], char type[], void *valeur);
 extern int yylex(void);
 extern int nb_ligne;
 extern int col;
@@ -80,7 +81,7 @@ extern void afficherTStab(void);
 extern void afficherToutesLesTablesSymboles(void);
 extern void gererTaille(char*, char*);
 
-#line 84 "src/syntax/syntax.tab.c"
+#line 85 "syntax.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -570,12 +571,12 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    72,    72,    83,    84,    89,    94,   100,   108,   113,
-     121,   125,   133,   139,   148,   149,   154,   158,   159,   163,
-     164,   165,   166,   167,   172,   176,   181,   190,   191,   192,
-     193,   194,   195,   196,   200,   207,   218,   219,   224,   229,
-     233,   236,   237,   241,   242,   246,   247,   251,   252,   253,
-     254,   255,   256,   257,   262,   263,   267,   271,   275
+       0,    73,    73,    84,    85,    90,    95,   100,   108,   112,
+     119,   123,   131,   136,   145,   146,   150,   154,   155,   159,
+     160,   161,   162,   163,   167,   171,   175,   182,   183,   184,
+     185,   186,   187,   188,   192,   199,   209,   210,   214,   218,
+     221,   224,   225,   229,   230,   234,   235,   239,   240,   241,
+     242,   243,   244,   245,   249,   250,   254,   258,   262
 };
 #endif
 
@@ -1229,256 +1230,251 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: MAINPRGM IDF ';' VAR declarations BEGINPG block ENDPG ';'  */
-#line 76 "src/syntax/syntax.y"
+#line 77 "syntax.y"
     {
       printf("\n\nCompilation terminée: programme MiniSoft\n");
       afficherToutesLesTablesSymboles();
     }
-#line 1238 "src/syntax/syntax.tab.c"
+#line 1239 "syntax.tab.c"
     break;
 
   case 5: /* declaration: LET var_list ':' type ';'  */
-#line 90 "src/syntax/syntax.y"
+#line 91 "syntax.y"
       {
         insertionTS_et_verif_double_declaration((yyvsp[-3].symbole), (yyvsp[-1].str));
       }
-#line 1246 "src/syntax/syntax.tab.c"
+#line 1247 "syntax.tab.c"
     break;
 
   case 6: /* declaration: LET var_list2 ':' type ';'  */
-#line 95 "src/syntax/syntax.y"
+#line 96 "syntax.y"
       {
-        /* Fix: We reference $2 (the var_list2) instead of $1 (the LET token). */
         insertionTStab_et_verif_double_declaration((yyvsp[-3].symbol), (yyvsp[-1].str));
       }
-#line 1255 "src/syntax/syntax.tab.c"
+#line 1255 "syntax.tab.c"
     break;
 
   case 7: /* declaration: DEFINE CONSTTK const_declaration ';'  */
-#line 101 "src/syntax/syntax.y"
-      { 
-        /* Insert the newly built constant into the TS. */
-        insertionTS_et_verif_double_declaration((yyvsp[-1].symbole), (yyvsp[-1].symbole)->type ? (yyvsp[-1].symbole)->type : "Int");
+#line 101 "syntax.y"
+      {
+        if (insererTableConst((yyvsp[-1].symbole)->entite, (yyvsp[-1].symbole)->type, &((yyvsp[-1].symbole)->valeur)) == -1)
+            yyerror("Double déclaration");
       }
-#line 1264 "src/syntax/syntax.tab.c"
+#line 1264 "syntax.tab.c"
     break;
 
   case 8: /* var_list: var_list ',' IDF  */
-#line 109 "src/syntax/syntax.y"
+#line 109 "syntax.y"
       { 
-        /* Build a linked list of variable names */
         (yyval.symbole) = creationVarlist1((yyvsp[0].str), (yyvsp[-2].symbole)); 
       }
-#line 1273 "src/syntax/syntax.tab.c"
+#line 1272 "syntax.tab.c"
     break;
 
   case 9: /* var_list: IDF  */
-#line 114 "src/syntax/syntax.y"
+#line 113 "syntax.y"
       { 
         (yyval.symbole) = creationVarlist1((yyvsp[0].str), NULL); 
       }
-#line 1281 "src/syntax/syntax.tab.c"
+#line 1280 "syntax.tab.c"
     break;
 
   case 10: /* var_list2: var_list2 ',' IDF '[' INTCST ']'  */
-#line 122 "src/syntax/syntax.y"
+#line 120 "syntax.y"
       {
         (yyval.symbol) = creationVarlist2((yyvsp[-3].str), (yyvsp[-1].entier), (yyvsp[-5].symbol));
       }
-#line 1289 "src/syntax/syntax.tab.c"
+#line 1288 "syntax.tab.c"
     break;
 
   case 11: /* var_list2: IDF '[' INTCST ']'  */
-#line 126 "src/syntax/syntax.y"
+#line 124 "syntax.y"
       {
         (yyval.symbol) = creationVarlist2((yyvsp[-3].str), (yyvsp[-1].entier), NULL);
       }
-#line 1297 "src/syntax/syntax.tab.c"
+#line 1296 "syntax.tab.c"
     break;
 
   case 12: /* const_declaration: IDF ':' type '=' constant_value  */
-#line 134 "src/syntax/syntax.y"
+#line 132 "syntax.y"
     {
       (yyval.symbole) = constDeclaration((yyvsp[0].con), (yyvsp[-4].str), 1);
-      /* set the type from $3 */
       (yyval.symbole)->type = strdup((yyvsp[-2].str));
     }
-#line 1307 "src/syntax/syntax.tab.c"
+#line 1305 "syntax.tab.c"
     break;
 
   case 13: /* const_declaration: IDF ':' type  */
-#line 140 "src/syntax/syntax.y"
+#line 137 "syntax.y"
     {
       (yyval.symbole) = constDeclaration(NULL, (yyvsp[-2].str), 0);
       (yyval.symbole)->type = strdup((yyvsp[0].str));
     }
-#line 1316 "src/syntax/syntax.tab.c"
+#line 1314 "syntax.tab.c"
     break;
 
   case 14: /* type: INT_TYPE  */
-#line 148 "src/syntax/syntax.y"
+#line 145 "syntax.y"
                  { (yyval.str) = strdup("Int"); }
-#line 1322 "src/syntax/syntax.tab.c"
+#line 1320 "syntax.tab.c"
     break;
 
   case 15: /* type: FLOAT_TYPE  */
-#line 149 "src/syntax/syntax.y"
+#line 146 "syntax.y"
                  { (yyval.str) = strdup("Float"); }
-#line 1328 "src/syntax/syntax.tab.c"
+#line 1326 "syntax.tab.c"
     break;
 
   case 24: /* assignment: IDF ASSIGN expression  */
-#line 173 "src/syntax/syntax.y"
+#line 168 "syntax.y"
     {
       gestionErreurAssig((yyvsp[0].con), (yyvsp[-2].str));
     }
-#line 1336 "src/syntax/syntax.tab.c"
+#line 1334 "syntax.tab.c"
     break;
 
   case 25: /* assignment: IDF '[' INTCST ']' ASSIGN expression  */
-#line 177 "src/syntax/syntax.y"
+#line 172 "syntax.y"
     {
       gestion_taille_tableau((yyvsp[-5].str), (yyvsp[-3].entier));
-      /* If the expression is valid, store it or do something. */
     }
-#line 1345 "src/syntax/syntax.tab.c"
+#line 1342 "syntax.tab.c"
     break;
 
   case 26: /* assignment: IDF '[' IDF ']' ASSIGN expression  */
-#line 182 "src/syntax/syntax.y"
+#line 176 "syntax.y"
     {
       gererTaille((yyvsp[-5].str), (yyvsp[-3].str));
-      /* same note as above. */
     }
-#line 1354 "src/syntax/syntax.tab.c"
+#line 1350 "syntax.tab.c"
     break;
 
   case 27: /* expression: expression '+' expression  */
-#line 190 "src/syntax/syntax.y"
+#line 182 "syntax.y"
                                 { (yyval.con) = gestionErreurType(1, (yyvsp[-2].con), (yyvsp[0].con)); }
-#line 1360 "src/syntax/syntax.tab.c"
+#line 1356 "syntax.tab.c"
     break;
 
   case 28: /* expression: expression '-' expression  */
-#line 191 "src/syntax/syntax.y"
+#line 183 "syntax.y"
                                 { (yyval.con) = gestionErreurType(2, (yyvsp[-2].con), (yyvsp[0].con)); }
-#line 1366 "src/syntax/syntax.tab.c"
+#line 1362 "syntax.tab.c"
     break;
 
   case 29: /* expression: expression '*' expression  */
-#line 192 "src/syntax/syntax.y"
+#line 184 "syntax.y"
                                 { (yyval.con) = gestionErreurType(3, (yyvsp[-2].con), (yyvsp[0].con)); }
-#line 1372 "src/syntax/syntax.tab.c"
+#line 1368 "syntax.tab.c"
     break;
 
   case 30: /* expression: expression '/' expression  */
-#line 193 "src/syntax/syntax.y"
+#line 185 "syntax.y"
                                 { (yyval.con) = gestionErreurType(4, (yyvsp[-2].con), (yyvsp[0].con)); }
-#line 1378 "src/syntax/syntax.tab.c"
+#line 1374 "syntax.tab.c"
     break;
 
   case 31: /* expression: '(' expression ')'  */
-#line 194 "src/syntax/syntax.y"
+#line 186 "syntax.y"
                                 { (yyval.con) = (yyvsp[-1].con); }
-#line 1384 "src/syntax/syntax.tab.c"
+#line 1380 "syntax.tab.c"
     break;
 
   case 32: /* expression: constant_value  */
-#line 195 "src/syntax/syntax.y"
+#line 187 "syntax.y"
                                 { (yyval.con) = (yyvsp[0].con); }
-#line 1390 "src/syntax/syntax.tab.c"
+#line 1386 "syntax.tab.c"
     break;
 
   case 33: /* expression: IDF  */
-#line 196 "src/syntax/syntax.y"
+#line 188 "syntax.y"
                                 { (yyval.con) = gestionIDF((yyvsp[0].str)); }
-#line 1396 "src/syntax/syntax.tab.c"
+#line 1392 "syntax.tab.c"
     break;
 
   case 34: /* constant_value: INTCST  */
-#line 201 "src/syntax/syntax.y"
+#line 193 "syntax.y"
       {
         constant *c = (constant *)malloc(sizeof(constant));
         strcpy(c->type, "Int");
         c->valeur.i = (yyvsp[0].entier);
         (yyval.con) = c;
       }
-#line 1407 "src/syntax/syntax.tab.c"
+#line 1403 "syntax.tab.c"
     break;
 
   case 35: /* constant_value: FLOATCST  */
-#line 208 "src/syntax/syntax.y"
+#line 200 "syntax.y"
       {
         constant *c = (constant *)malloc(sizeof(constant));
         strcpy(c->type, "Float");
         c->valeur.f = (yyvsp[0].reel);
         (yyval.con) = c;
       }
-#line 1418 "src/syntax/syntax.tab.c"
+#line 1414 "syntax.tab.c"
     break;
 
   case 47: /* condition_comp: expression '<' expression  */
-#line 251 "src/syntax/syntax.y"
+#line 239 "syntax.y"
                                  { gestionIncompatibilite((yyvsp[-2].con), (yyvsp[0].con)); }
-#line 1424 "src/syntax/syntax.tab.c"
+#line 1420 "syntax.tab.c"
     break;
 
   case 48: /* condition_comp: expression '>' expression  */
-#line 252 "src/syntax/syntax.y"
+#line 240 "syntax.y"
                                  { gestionIncompatibilite((yyvsp[-2].con), (yyvsp[0].con)); }
-#line 1430 "src/syntax/syntax.tab.c"
+#line 1426 "syntax.tab.c"
     break;
 
   case 49: /* condition_comp: expression LE expression  */
-#line 253 "src/syntax/syntax.y"
+#line 241 "syntax.y"
                                  { gestionIncompatibilite((yyvsp[-2].con), (yyvsp[0].con)); }
-#line 1436 "src/syntax/syntax.tab.c"
+#line 1432 "syntax.tab.c"
     break;
 
   case 50: /* condition_comp: expression GE expression  */
-#line 254 "src/syntax/syntax.y"
+#line 242 "syntax.y"
                                  { gestionIncompatibilite((yyvsp[-2].con), (yyvsp[0].con)); }
-#line 1442 "src/syntax/syntax.tab.c"
+#line 1438 "syntax.tab.c"
     break;
 
   case 51: /* condition_comp: expression EQ expression  */
-#line 255 "src/syntax/syntax.y"
+#line 243 "syntax.y"
                                  { gestionIncompatibiliteEQ_NEQ((yyvsp[-2].con), (yyvsp[0].con)); }
-#line 1448 "src/syntax/syntax.tab.c"
+#line 1444 "syntax.tab.c"
     break;
 
   case 52: /* condition_comp: expression NEQ expression  */
-#line 256 "src/syntax/syntax.y"
+#line 244 "syntax.y"
                                  { gestionIncompatibiliteEQ_NEQ((yyvsp[-2].con), (yyvsp[0].con)); }
-#line 1454 "src/syntax/syntax.tab.c"
+#line 1450 "syntax.tab.c"
     break;
 
   case 56: /* ioparam: IDF  */
-#line 268 "src/syntax/syntax.y"
+#line 255 "syntax.y"
       {
         gestion_io_statement(0, (yyvsp[0].str), -1);
       }
-#line 1462 "src/syntax/syntax.tab.c"
+#line 1458 "syntax.tab.c"
     break;
 
   case 57: /* ioparam: IDF '[' INTCST ']'  */
-#line 272 "src/syntax/syntax.y"
+#line 259 "syntax.y"
       {
         gestion_io_statement(1, (yyvsp[-3].str), (yyvsp[-1].entier));
       }
-#line 1470 "src/syntax/syntax.tab.c"
+#line 1466 "syntax.tab.c"
     break;
 
   case 58: /* ioparam: IDF '[' IDF ']'  */
-#line 276 "src/syntax/syntax.y"
+#line 263 "syntax.y"
       {
         gererTaille((yyvsp[-3].str), (yyvsp[-1].str));
       }
-#line 1478 "src/syntax/syntax.tab.c"
+#line 1474 "syntax.tab.c"
     break;
 
 
-#line 1482 "src/syntax/syntax.tab.c"
+#line 1478 "syntax.tab.c"
 
       default: break;
     }
@@ -1671,7 +1667,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 281 "src/syntax/syntax.y"
+#line 268 "syntax.y"
 
 
 void yyerror(const char *s) {

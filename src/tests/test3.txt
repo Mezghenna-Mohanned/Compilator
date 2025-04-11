@@ -1,8 +1,13 @@
 MainPrgm StatsProg ;
 Var
-    let a, b, c : Int ;
+    let i, a, b, c : Int ;
+    let sum, avg : Float ;
+    let nums[10] : Int ;
     let o, v, w : Int ;
-    @define Const Pi : Float = 3.1416 ;
+    let vals[5], ratios[5] : Float ;
+    @define Const Pi    : Float = 3.1416 ;
+    @define Const Limit : Int   = 10 ;
+
 BeginPg
 {
     Pi := 4.0 ;
@@ -12,5 +17,31 @@ BeginPg
     o := 7 ;
     v := 7 ;
     w := 1 / (o - v) ;
+
+    sum := 0 ;
+    for i from 0 to 9 step 1 {
+        nums[i] := i + 1 ;
+        sum := sum + nums[i] ;
+    }
+    if (Limit != 0) then {
+        avg := sum / Limit ;
+    } else {
+        avg := 0 ;
+    }
+    output("Average: ") ;
+    output(avg) ;
+
+    for i from 0 to 4 step 1 {
+        vals[i]   := (i + 1) * 2.5 ;
+        ratios[i] := vals[i] / Pi ;
+    }
+    for i from 0 to 4 step 1 {
+        output(vals[i]) ;
+        output(ratios[i]) ;
+    }
+    
+    do {
+        a := a + 1 ;
+    } while (a < 5) ;
 }
 EndPg ;
