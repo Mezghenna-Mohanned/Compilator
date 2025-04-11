@@ -13,11 +13,12 @@ BeginPg
     a := 1 ;
     b := 2 ;
     c := a + b * 3 ;
+    Pi := 4.0;
     o := 7;
     v := 7;
     w := 1/(o-v);
 
-
+    
     {-- Fill nums array --}
     for i from 0 to 9 step 1 {
         nums[i] := i + 1 ;

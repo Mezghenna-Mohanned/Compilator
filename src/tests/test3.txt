@@ -1,0 +1,16 @@
+MainPrgm StatsProg ;
+Var
+    let a, b, c : Int ;
+    let o, v, w : Int ;
+    @define Const Pi : Float = 3.1416 ;
+BeginPg
+{
+    Pi := 4.0 ;
+    a := 1 ;
+    b := 2 ;
+    c := a + b * 3 ;
+    o := 7 ;
+    v := 7 ;
+    w := 1 / (o - v) ;
+}
+EndPg ;
