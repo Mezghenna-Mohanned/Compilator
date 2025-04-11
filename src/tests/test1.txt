@@ -3,7 +3,6 @@ Var
     let i , a , b , c : Int ;
     let sum , avg : Float ;
     let nums[10] : Int ;
-    let o,v,w : Int;
     let vals[5] , ratios[5] : Float ;
     @define Const Pi    : Float = 3.1416 ;
     @define Const Limit : Int   = 10 ;
@@ -13,11 +12,6 @@ BeginPg
     a := 1 ;
     b := 2 ;
     c := a + b * 3 ;
-    Pi := 4.0;
-    o := 7;
-    v := 7;
-    w := 1/(o-v);
-
     
     {-- Fill nums array --}
     for i from 0 to 9 step 1 {

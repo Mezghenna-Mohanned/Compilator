@@ -83,41 +83,48 @@ int chercherTailleTab(char tete[]) {
 }
 
 void insererKeyword(const char* kw) {
-    printf("Keyword: %s\n", kw);
+    printf("%sKeyword:%s %s\n", YELLOW, RESET, kw);
 }
-
 void insererOperator(const char* op) {
-    printf("Operator: %s\n", op);
+    printf("%sOperator:%s %s\n", YELLOW, RESET, op);
 }
-
 void insererCompareOp(const char* op) {
-    printf("CompareOp: %s\n", op);
+    printf("%sCompareOp:%s %s\n", YELLOW, RESET, op);
 }
-
 void insererLogicOp(const char* op) {
-    printf("LogicOp: %s\n", op);
+    printf("%sLogicOp:%s %s\n", YELLOW, RESET, op);
 }
 
 void afficherToutesLesTablesSymboles(void) {
-    printf("----- Table des symboles (Variables / Const) -----\n");
+    printf("%s+----------------------+------------+--------------+\n", YELLOW);
+    printf("| %-20s | %-10s | %-12s |\n", "Identifier", "Type", "Properties");
+    printf("+----------------------+------------+--------------+%s\n", RESET);
     listeD *p = TS;
     while (p) {
-        printf("  %s : %s%s\n", p->entite, p->type, p->is_const ? " [const]" : "");
+        printf("%s| %-20s | %-10s | %-12s |%s\n", CYAN, p->entite, p->type, (p->is_const ? "const" : "variable"), RESET);
         p = p->suivant;
     }
-    printf("----- Table des tableaux -----\n");
+    printf("%s+----------------------+------------+--------------+\n\n%s", YELLOW, RESET);
+
+    printf("%s+----------------------+------------+---------+\n", YELLOW);
+    printf("| %-20s | %-10s | %-7s |\n", "Array", "Type", "Size");
+    printf("+----------------------+------------+---------+%s\n", RESET);
     listeT *q = TStab;
     while (q) {
-        printf("  %s : %s[%d]\n", q->entite, q->type, q->taille);
+        printf("%s| %-20s | %-10s | %-7d |%s\n", CYAN, q->entite, q->type, q->taille, RESET);
         q = q->suivant;
     }
+    printf("%s+----------------------+------------+---------+\n%s\n", YELLOW, RESET);
 }
 
 void afficherTStab(void) {
-    printf("Affichage table des tableaux:\n");
+    printf("%s+----------------------+------------+---------+\n", YELLOW);
+    printf("| %-20s | %-10s | %-7s |\n", "Array", "Type", "Size");
+    printf("+----------------------+------------+---------+%s\n", RESET);
     listeT *q = TStab;
     while (q) {
-        printf("  %s : %s[%d]\n", q->entite, q->type, q->taille);
+        printf("%s| %-20s | %-10s | %-7d |%s\n", CYAN, q->entite, q->type, q->taille, RESET);
         q = q->suivant;
     }
+    printf("%s+----------------------+------------+---------+\n%s\n", YELLOW, RESET);
 }

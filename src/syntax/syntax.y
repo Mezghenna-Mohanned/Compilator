@@ -279,7 +279,6 @@ int main() {
     int result = yyparse();
     if (result == 0 && yynerrs == 0) {
         printf("\n\n%sAnalyse syntaxique réussie%s\n\n", GREEN, RESET);
-        afficherToutesLesTablesSymboles();
     } else {
         printf("\n\nNombre total d'erreurs: %d\n\n", yynerrs);
     }
