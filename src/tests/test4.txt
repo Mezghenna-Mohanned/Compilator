@@ -9,9 +9,6 @@ BeginPg
     x := (-3.14) ;
     y := (+2.718) ;
 
-    output("Int a = ") ;   output(a) ;
-    output("Int b = ") ;   output(b) ;
-    output("Float x = ") ; output(x) ;
-    output("Float y = ") ; output(y) ;
+
 }
 EndPg ;
