@@ -1,0 +1,14 @@
+MainPrgm dest ;
+Var
+    let ok           : Int ;
+    let data_1       : Int ;
+    let abcdefghijklm : Int ;
+
+    let capital_letter       : Int ;
+    let _badstart            : Int ;
+
+BeginPg
+{
+    ok := 1 ;
+}
+EndPg ;

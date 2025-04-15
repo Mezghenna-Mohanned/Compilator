@@ -1,6 +1,9 @@
 %{
 #include "syntax.tab.h"
 #include "semantique.h"
+#include <ctype.h>
+#include <string.h>
+#include <stdio.h>
 
 extern YYSTYPE yylval;
 
@@ -98,14 +101,56 @@ assign_op           ":="
 {int_pat}           { yylval.entier = atoi(yytext); return INTCST;   }
 
 {good_idf}          {
-                       if (yytext[strlen(yytext)-1] == '_' || strstr(yytext,"__"))
-                       {
+                       int err = 0;
+                       size_t len = strlen(yytext);
+
+                       /* règle 1 : longueur > 14 */
+                       if (len > 14) {
                            fprintf(stderr,
-                                   "Erreur lexicale (identifiant invalide) '%s' ligne %d, col %d\n",
-                                   yytext, nb_ligne, col);
+                             "Identificateur >14 caractères  '%s'  ligne %d, col %d\n",
+                             yytext, nb_ligne, col);
+                           err = 1;
+                       }
+                       /* règle 2 : premier caractère pas minuscule */
+                       else if (!(yytext[0] >= 'a' && yytext[0] <= 'z')) {
+                           fprintf(stderr,
+                             "Identificateur doit commencer par une lettre minuscule  '%s'  ligne %d, col %d\n",
+                             yytext, nb_ligne, col);
+                           err = 1;
+                       }
+                       /* règle 3 : contient une majuscule */
+                       else {
+                           for (size_t i = 0; i < len; ++i)
+                               if (isupper((unsigned char)yytext[i])) {
+                                   fprintf(stderr,
+                                     "Identificateur contient des majuscules  '%s'  ligne %d, col %d\n",
+                                     yytext, nb_ligne, col);
+                                   err = 1;
+                                   break;
+                               }
+                       }
+                       /* règle 4 : finit par '_' */
+                       if (!err && yytext[len-1] == '_') {
+                           fprintf(stderr,
+                             "Identificateur se termine par '_'  '%s'  ligne %d, col %d\n",
+                             yytext, nb_ligne, col);
+                           err = 1;
+                       }
+                       /* règle 5 : '__' consécutifs */
+                       if (!err && strstr(yytext,"__")) {
+                           fprintf(stderr,
+                             "Identificateur contient '__' consécutifs  '%s'  ligne %d, col %d\n",
+                             yytext, nb_ligne, col);
+                           err = 1;
+                       }
+
+                       if (err) {
+                           col += yyleng;
                            return -1;
                        }
+
                        yylval.str = strdup(yytext);
+                       col += yyleng;
                        return IDF;
                     }
 
@@ -123,6 +168,7 @@ assign_op           ":="
                        fprintf(stderr,
                                "Caractère invalide '%s' ligne %d, col %d\n",
                                yytext, nb_ligne, col);
+                       col += yyleng;
                        return -1;
                     }
 
