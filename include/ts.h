@@ -9,9 +9,9 @@
 #define MAX_TYPE_LENGTH 50
 
 typedef struct constant {
-    char type[MAX_TYPE_LENGTH]; 
+    char type[MAX_TYPE_LENGTH];
     union {
-        int i;
+        int   i;
         float f;
         char *s;
     } valeur;
@@ -20,9 +20,9 @@ typedef struct constant {
 typedef struct listeD {
     char *entite;
     char *type;
-    int is_const; /* 1 if it's a constant, 0 otherwise */
+    int is_const;
     union {
-        int i;
+        int   i;
         float f;
         char *s;
     } valeur;
@@ -32,16 +32,26 @@ typedef struct listeD {
 typedef struct listeT {
     char *entite;
     char *type;
-    int taille;
-    union {
-        int i;
-        float f;
-        char *s;
-    } valeur;
+    int   taille;
     struct listeT *suivant;
 } listeT;
 
-extern listeD *TS;    /* Variables and constants */
-extern listeT *TStab; /* Arrays */
+typedef struct listeKW {
+    char *mot;
+    struct listeKW *suivant;
+} listeKW;
+
+typedef struct listeOP {
+    char *op;
+    struct listeOP *suivant;
+} listeOP;
+
+
+extern listeD  *TS;          /* variables & consts */
+extern listeT  *TStab;       /* arrays             */
+extern listeKW *TSkw;        /* keywords           */
+extern listeOP *TSarith;     /* + – * /            */
+extern listeOP *TScomp;      /* < > == …           */
+extern listeOP *TSlogic;     /* AND OR !           */
 
 #endif
