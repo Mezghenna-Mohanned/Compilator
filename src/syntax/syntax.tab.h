@@ -84,14 +84,15 @@ extern int yydebug;
     STRING = 279,                  /* STRING  */
     INT_TYPE = 280,                /* INT_TYPE  */
     FLOAT_TYPE = 281,              /* FLOAT_TYPE  */
-    ASSIGN = 282,                  /* ASSIGN  */
-    LE = 283,                      /* LE  */
-    GE = 284,                      /* GE  */
-    EQ = 285,                      /* EQ  */
-    NEQ = 286,                     /* NEQ  */
-    AND = 287,                     /* AND  */
-    OR = 288,                      /* OR  */
-    NOT = 289                      /* NOT  */
+    STRING_TYPE = 282,             /* STRING_TYPE  */
+    ASSIGN = 283,                  /* ASSIGN  */
+    LE = 284,                      /* LE  */
+    GE = 285,                      /* GE  */
+    EQ = 286,                      /* EQ  */
+    NEQ = 287,                     /* NEQ  */
+    AND = 288,                     /* AND  */
+    OR = 289,                      /* OR  */
+    NOT = 290                      /* NOT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -109,7 +110,7 @@ union YYSTYPE
     listeT *symbol;
     constant *con;
 
-#line 113 "syntax.tab.h"
+#line 114 "syntax.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

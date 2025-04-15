@@ -1,18 +1,26 @@
-MainPrgm prog ;
+MainPrgm inputoutput ;
 
 Var
-    let x, y : Int ;
-    let a, b : Float ;
+    let nom : String ;
+    let nom1 : String ;
 
 BeginPg
 {
-    output("=========== TEST INPUT / OUTPUT ==========");
+    output("============= MiniSoft IO Test =============");
 
-    output("Hi im mohanned");
+    output("wch asmek ? ");
+    input(nom);
 
-    output("and im Nesrine");
+    output("el binome t3k wch asmo ?");
+    input(nom1);
 
-    output("we are building a compiler");
+    output("------------- Valeurs Saisies -------------");
+
+    output("Bonjour :");
+    output(nom);
+
+    output("nti tan bonjour ya");
+
 
 }
 EndPg ;

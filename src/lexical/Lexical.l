@@ -35,6 +35,7 @@ assign_op           ":="
 "let"               { insererKeyword("let");       return LET;      }
 "Int"               { return INT_TYPE;  }
 "Float"             { return FLOAT_TYPE; }
+"String"            { return STRING_TYPE; }
 
 "@define"           { insererKeyword("@define");   return DEFINE;   }
 "Const"             { insererKeyword("Const");     return CONSTTK;  }

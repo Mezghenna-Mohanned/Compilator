@@ -47,11 +47,11 @@ typedef struct listeOP {
 } listeOP;
 
 
-extern listeD  *TS;          /* variables & consts */
-extern listeT  *TStab;       /* arrays             */
-extern listeKW *TSkw;        /* keywords           */
-extern listeOP *TSarith;     /* + – * /            */
-extern listeOP *TScomp;      /* < > == …           */
-extern listeOP *TSlogic;     /* AND OR !           */
+extern listeD  *TS;
+extern listeT  *TStab;
+extern listeKW *TSkw;
+extern listeOP *TSarith;
+extern listeOP *TScomp;
+extern listeOP *TSlogic;
 
 #endif

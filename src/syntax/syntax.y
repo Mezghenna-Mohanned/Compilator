@@ -44,6 +44,7 @@ void afficher(constant *val);
 
 %token INT_TYPE
 %token FLOAT_TYPE
+%token STRING_TYPE
 
 %token ASSIGN /* := */
 
@@ -146,11 +147,12 @@ const_declaration:
     }
     ;
 
-/* nonterm to hold the string "Int" or "Float" */
 type:
       INT_TYPE   { $$ = strdup("Int"); }
     | FLOAT_TYPE { $$ = strdup("Float"); }
+    | STRING_TYPE { $$ = strdup("String"); }
     ;
+
 
 block:
     '{' statements '}'

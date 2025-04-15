@@ -31,7 +31,12 @@ int insererTableVar(char entite[], char type[], void *valeur)
     n->entite   = strdup(entite);
     n->type     = strdup(type);
     n->is_const = 0;
-    n->valeur.i = 0;
+
+    if (!strcmp(type, "String"))
+        n->valeur.s = malloc(100);
+    else
+        n->valeur.i = 0;
+
     n->suivant  = TS;
     TS = n;
     return 0;
@@ -46,8 +51,11 @@ int insererTableConst(char entite[], char type[], void *valeur)
     n->entite   = strdup(entite);
     n->type     = strdup(type);
     n->is_const = 1;
+
     if (!strcmp(type, "Int"))   n->valeur.i = *(int *)valeur;
     if (!strcmp(type, "Float")) n->valeur.f = *(float *)valeur;
+    if (!strcmp(type, "String")) n->valeur.s = strdup((char *)valeur);
+
     n->suivant  = TS;
     TS = n;
     return 0;
@@ -90,7 +98,6 @@ void insererKeyword(const char *kw)
         n->suivant = TSkw;
         TSkw = n;
     }
-    printf("%sKeyword:%s %s\n", YELLOW, RESET, kw);
 }
 
 void insererOperator(const char *op)
@@ -192,6 +199,7 @@ void lire(char *idf)
         yyerror("Variable non déclarée pour input()");
         return;
     }
+    freopen("CON", "r", stdin);
 
     if (strcmp(var->type, "Int") == 0) {
         printf(">> Saisir un entier (%s): ", idf);
@@ -199,6 +207,9 @@ void lire(char *idf)
     } else if (strcmp(var->type, "Float") == 0) {
         printf(">> Saisir un réel (%s): ", idf);
         scanf("%f", &var->valeur.f);
+    } else if (strcmp(var->type, "String") == 0) {
+        printf(">> Saisir un texte (%s): ", idf);
+        scanf(" %[^\n]", var->valeur.s);
     } else {
         yyerror("Type non supporté dans input()");
     }
@@ -215,6 +226,8 @@ void afficher(constant *val)
         printf("%d\n", val->valeur.i);
     } else if (strcmp(val->type, "Float") == 0) {
         printf("%f\n", val->valeur.f);
+    } else if (strcmp(val->type, "String") == 0) {
+        printf("%s\n", val->valeur.s);
     } else {
         yyerror("Type non supporté dans output()");
     }
