@@ -1,8 +1,8 @@
 MainPrgm dest ;
 Var
-    let ok           : Int ;
+    let Ok           : Int ;
     let data_1       : Int ;
-    let abcdefghijklm : Int ;
+    let abcdefghijklms : Int ;
 
     let capital_letter       : Int ;
     let _badstart            : Int ;
