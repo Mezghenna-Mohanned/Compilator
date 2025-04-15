@@ -1,0 +1,38 @@
+MainPrgm prog ;
+
+Var
+    let x, y : Int ;
+    let a, b : Float ;
+
+BeginPg
+{
+    output("=========== TEST INPUT / OUTPUT ==========");
+
+    output("Donner x : ");
+    input(x);
+
+    output("Donner y : ");
+    input(y);
+
+    output("Donner a : ");
+    input(a);
+
+    output("Donner b : ");
+    input(b);
+
+    output("------- Valeurs Saisies -------");
+
+    output(x);
+    output(y);
+    output(a);
+    output(b);
+
+    x := x + 10 ;
+    a := a * 3.5 ;
+
+    output("------- Valeurs Modifiees -------");
+
+    output(x);
+    output(a);
+}
+EndPg ;

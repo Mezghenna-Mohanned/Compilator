@@ -1,11 +1,12 @@
 #include "semantique.h"
+#include <stdio.h>
 
-listeD  *TS      = NULL;   /* variables & constantes                      */
-listeT  *TStab   = NULL;   /* tableaux                                    */
-listeKW *TSkw    = NULL;   /* mots‑clés                                   */
-listeOP *TSarith = NULL;   /* +  -  *  /                                  */
-listeOP *TScomp  = NULL;   /* <  >  ==  !=  <=  >=                        */
-listeOP *TSlogic = NULL;   /* AND  OR  !                                  */
+listeD  *TS      = NULL;
+listeT  *TStab   = NULL;
+listeKW *TSkw    = NULL;
+listeOP *TSarith = NULL;
+listeOP *TScomp  = NULL;
+listeOP *TSlogic = NULL;
 
 static int dejaDansOP(listeOP *l, const char *lex)
 {
@@ -182,4 +183,39 @@ void afficherToutesLesTablesSymboles(void)
                "Op comp",  TScomp);
     afficherOP("Table des symboles operateurs logiques",
                "Op log",   TSlogic);
+}
+
+void lire(char *idf)
+{
+    listeD *var = chercherTS(idf);
+    if (!var) {
+        yyerror("Variable non déclarée pour input()");
+        return;
+    }
+
+    if (strcmp(var->type, "Int") == 0) {
+        printf(">> Saisir un entier (%s): ", idf);
+        scanf("%d", &var->valeur.i);
+    } else if (strcmp(var->type, "Float") == 0) {
+        printf(">> Saisir un réel (%s): ", idf);
+        scanf("%f", &var->valeur.f);
+    } else {
+        yyerror("Type non supporté dans input()");
+    }
+}
+
+void afficher(constant *val)
+{
+    if (!val) {
+        yyerror("Expression invalide dans output()");
+        return;
+    }
+
+    if (strcmp(val->type, "Int") == 0) {
+        printf("%d\n", val->valeur.i);
+    } else if (strcmp(val->type, "Float") == 0) {
+        printf("%f\n", val->valeur.f);
+    } else {
+        yyerror("Type non supporté dans output()");
+    }
 }

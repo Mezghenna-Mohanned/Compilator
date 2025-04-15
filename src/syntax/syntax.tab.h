@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 16 "syntax.y"
+#line 20 "syntax.y"
 
   #include "include/ts.h"
 
@@ -81,16 +81,17 @@ extern int yydebug;
     INTCST = 276,                  /* INTCST  */
     FLOATCST = 277,                /* FLOATCST  */
     IDF = 278,                     /* IDF  */
-    INT_TYPE = 279,                /* INT_TYPE  */
-    FLOAT_TYPE = 280,              /* FLOAT_TYPE  */
-    ASSIGN = 281,                  /* ASSIGN  */
-    LE = 282,                      /* LE  */
-    GE = 283,                      /* GE  */
-    EQ = 284,                      /* EQ  */
-    NEQ = 285,                     /* NEQ  */
-    AND = 286,                     /* AND  */
-    OR = 287,                      /* OR  */
-    NOT = 288                      /* NOT  */
+    STRING = 279,                  /* STRING  */
+    INT_TYPE = 280,                /* INT_TYPE  */
+    FLOAT_TYPE = 281,              /* FLOAT_TYPE  */
+    ASSIGN = 282,                  /* ASSIGN  */
+    LE = 283,                      /* LE  */
+    GE = 284,                      /* GE  */
+    EQ = 285,                      /* EQ  */
+    NEQ = 286,                     /* NEQ  */
+    AND = 287,                     /* AND  */
+    OR = 288,                      /* OR  */
+    NOT = 289                      /* NOT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -99,7 +100,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 21 "syntax.y"
+#line 25 "syntax.y"
 
     int    entier;
     float  reel;
@@ -108,7 +109,7 @@ union YYSTYPE
     listeT *symbol;
     constant *con;
 
-#line 112 "syntax.tab.h"
+#line 113 "syntax.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

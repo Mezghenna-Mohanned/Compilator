@@ -10,6 +10,10 @@ extern void yyerror(const char *s);
 extern void afficherTStab(void);
 extern void afficherToutesLesTablesSymboles(void);
 extern void gererTaille(char*, char*);
+
+void lire(char *idf);
+void afficher(constant *val);
+
 %}
 
 /* We need ts.h for 'listeD', 'listeT', 'constant' in %union */
@@ -36,6 +40,7 @@ extern void gererTaille(char*, char*);
 %token <entier> INTCST
 %token <reel>   FLOATCST
 %token <str>    IDF
+%token <str> STRING
 
 %token INT_TYPE
 %token FLOAT_TYPE
@@ -50,6 +55,7 @@ extern void gererTaille(char*, char*);
 %token AND
 %token OR
 %token NOT /* ! */
+
 
 %left OR
 %left AND
@@ -245,25 +251,19 @@ condition_comp:
     | '(' condition ')'
     ;
 
+
 iostatement:
-      INPUT '(' ioparam ')'
-    | OUTPUT '(' ioparam ')'
+      INPUT '(' IDF ')' {
+        lire($3);
+      }
+    | OUTPUT '(' expression ')' {
+        afficher($3);
+      }
+    | OUTPUT '(' STRING ')' {
+        printf("%s\n", $3);
+      }
     ;
 
-ioparam:
-      IDF
-      {
-        gestion_io_statement(0, $1, -1);
-      }
-    | IDF '[' INTCST ']'
-      {
-        gestion_io_statement(1, $1, $3);
-      }
-    | IDF '[' IDF ']'
-      {
-        gererTaille($1, $3);
-      }
-    ;
 
 %%
 

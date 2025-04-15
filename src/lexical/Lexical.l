@@ -100,6 +100,8 @@ assign_op           ":="
 {float_pat}         { yylval.reel   = atof(yytext); return FLOATCST; }
 {int_pat}           { yylval.entier = atoi(yytext); return INTCST;   }
 
+\"([^\\\"\n]|\\.)*\"      { yylval.str = strdup(yytext); return STRING; } // 3es rohk ywdi
+
 {good_idf}          {
                        int err = 0;
                        size_t len = strlen(yytext);
