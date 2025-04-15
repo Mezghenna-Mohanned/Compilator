@@ -8,31 +8,11 @@ BeginPg
 {
     output("=========== TEST INPUT / OUTPUT ==========");
 
-    output("Donner x : ");
-    input(x);
+    output("Hi im mohanned");
 
-    output("Donner y : ");
-    input(y);
+    output("and im Nesrine");
 
-    output("Donner a : ");
-    input(a);
+    output("we are building a compiler");
 
-    output("Donner b : ");
-    input(b);
-
-    output("------- Valeurs Saisies -------");
-
-    output(x);
-    output(y);
-    output(a);
-    output(b);
-
-    x := x + 10 ;
-    a := a * 3.5 ;
-
-    output("------- Valeurs Modifiees -------");
-
-    output(x);
-    output(a);
 }
 EndPg ;
