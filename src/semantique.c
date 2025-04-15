@@ -1,4 +1,5 @@
 #include "semantique.h"
+#include <stdio.h>
 
 listeD  *TS      = NULL;   /* variables & constantes                      */
 listeT  *TStab   = NULL;   /* tableaux                                    */
@@ -30,7 +31,12 @@ int insererTableVar(char entite[], char type[], void *valeur)
     n->entite   = strdup(entite);
     n->type     = strdup(type);
     n->is_const = 0;
-    n->valeur.i = 0;
+
+    if (!strcmp(type, "String"))
+        n->valeur.s = malloc(100);  // Allocate string space
+    else
+        n->valeur.i = 0;  // Default for int/float
+
     n->suivant  = TS;
     TS = n;
     return 0;
@@ -45,8 +51,11 @@ int insererTableConst(char entite[], char type[], void *valeur)
     n->entite   = strdup(entite);
     n->type     = strdup(type);
     n->is_const = 1;
+
     if (!strcmp(type, "Int"))   n->valeur.i = *(int *)valeur;
     if (!strcmp(type, "Float")) n->valeur.f = *(float *)valeur;
+    if (!strcmp(type, "String")) n->valeur.s = strdup((char *)valeur);
+
     n->suivant  = TS;
     TS = n;
     return 0;
@@ -99,7 +108,6 @@ void insererOperator(const char *op)
         n->suivant = TSarith;
         TSarith = n;
     }
-    printf("%sOperator:%s %s\n", YELLOW, RESET, op);
 }
 
 void insererCompareOp(const char *op)
@@ -110,7 +118,6 @@ void insererCompareOp(const char *op)
         n->suivant = TScomp;
         TScomp = n;
     }
-    printf("%sCompareOp:%s %s\n", YELLOW, RESET, op);
 }
 
 void insererLogicOp(const char *op)
@@ -121,7 +128,6 @@ void insererLogicOp(const char *op)
         n->suivant = TSlogic;
         TSlogic = n;
     }
-    printf("%sLogicOp:%s %s\n", YELLOW, RESET, op);
 }
 
 static void ligne_sep(int len)
@@ -181,4 +187,20 @@ void afficherToutesLesTablesSymboles(void)
                "Op comp",  TScomp);
     afficherOP("Table des symboles operateurs logiques",
                "Op log",   TSlogic);
+}
+
+int errorCount = 0;
+
+
+void finalizeAndPrintTS(void)
+{
+    if (errorCount > 0)
+    {
+        printf("\n%s%d errors found. Symbol Table:\n", RED, errorCount);
+    }
+    else
+    {
+        printf("\n%sNo errors. Symbol Table:\n", GREEN);
+    }
+    afficherToutesLesTablesSymboles();
 }
