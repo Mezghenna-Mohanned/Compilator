@@ -35,7 +35,6 @@ assign_op           ":="
 "let"               { insererKeyword("let");       return LET;      }
 "Int"               { return INT_TYPE;  }
 "Float"             { return FLOAT_TYPE; }
-"String"            { return STRING_TYPE; }
 
 "@define"           { insererKeyword("@define");   return DEFINE;   }
 "Const"             { insererKeyword("Const");     return CONSTTK;  }
@@ -100,8 +99,6 @@ assign_op           ":="
 
 {float_pat}         { yylval.reel   = atof(yytext); return FLOATCST; }
 {int_pat}           { yylval.entier = atoi(yytext); return INTCST;   }
-
-\"([^\\\"\n]|\\.)*\"      { yylval.str = strdup(yytext); return STRING; } // 3es rohk ywdi
 
 {good_idf}          {
                        int err = 0;

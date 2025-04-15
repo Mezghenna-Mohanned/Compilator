@@ -1,12 +1,11 @@
 #include "semantique.h"
-#include <stdio.h>
 
-listeD  *TS      = NULL;
-listeT  *TStab   = NULL;
-listeKW *TSkw    = NULL;
-listeOP *TSarith = NULL;
-listeOP *TScomp  = NULL;
-listeOP *TSlogic = NULL;
+listeD  *TS      = NULL;   /* variables & constantes                      */
+listeT  *TStab   = NULL;   /* tableaux                                    */
+listeKW *TSkw    = NULL;   /* mots‑clés                                   */
+listeOP *TSarith = NULL;   /* +  -  *  /                                  */
+listeOP *TScomp  = NULL;   /* <  >  ==  !=  <=  >=                        */
+listeOP *TSlogic = NULL;   /* AND  OR  !                                  */
 
 static int dejaDansOP(listeOP *l, const char *lex)
 {
@@ -31,12 +30,7 @@ int insererTableVar(char entite[], char type[], void *valeur)
     n->entite   = strdup(entite);
     n->type     = strdup(type);
     n->is_const = 0;
-
-    if (!strcmp(type, "String"))
-        n->valeur.s = malloc(100);
-    else
-        n->valeur.i = 0;
-
+    n->valeur.i = 0;
     n->suivant  = TS;
     TS = n;
     return 0;
@@ -51,11 +45,8 @@ int insererTableConst(char entite[], char type[], void *valeur)
     n->entite   = strdup(entite);
     n->type     = strdup(type);
     n->is_const = 1;
-
     if (!strcmp(type, "Int"))   n->valeur.i = *(int *)valeur;
     if (!strcmp(type, "Float")) n->valeur.f = *(float *)valeur;
-    if (!strcmp(type, "String")) n->valeur.s = strdup((char *)valeur);
-
     n->suivant  = TS;
     TS = n;
     return 0;
@@ -190,45 +181,4 @@ void afficherToutesLesTablesSymboles(void)
                "Op comp",  TScomp);
     afficherOP("Table des symboles operateurs logiques",
                "Op log",   TSlogic);
-}
-
-void lire(char *idf)
-{
-    listeD *var = chercherTS(idf);
-    if (!var) {
-        yyerror("Variable non déclarée pour input()");
-        return;
-    }
-    freopen("CON", "r", stdin);
-
-    if (strcmp(var->type, "Int") == 0) {
-        printf(">> Saisir un entier (%s): ", idf);
-        scanf("%d", &var->valeur.i);
-    } else if (strcmp(var->type, "Float") == 0) {
-        printf(">> Saisir un réel (%s): ", idf);
-        scanf("%f", &var->valeur.f);
-    } else if (strcmp(var->type, "String") == 0) {
-        printf(">> Saisir un texte (%s): ", idf);
-        scanf(" %[^\n]", var->valeur.s);
-    } else {
-        yyerror("Type non supporté dans input()");
-    }
-}
-
-void afficher(constant *val)
-{
-    if (!val) {
-        yyerror("Expression invalide dans output()");
-        return;
-    }
-
-    if (strcmp(val->type, "Int") == 0) {
-        printf("%d\n", val->valeur.i);
-    } else if (strcmp(val->type, "Float") == 0) {
-        printf("%f\n", val->valeur.f);
-    } else if (strcmp(val->type, "String") == 0) {
-        printf("%s\n", val->valeur.s);
-    } else {
-        yyerror("Type non supporté dans output()");
-    }
 }

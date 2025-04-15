@@ -10,10 +10,6 @@ extern void yyerror(const char *s);
 extern void afficherTStab(void);
 extern void afficherToutesLesTablesSymboles(void);
 extern void gererTaille(char*, char*);
-
-void lire(char *idf);
-void afficher(constant *val);
-
 %}
 
 /* We need ts.h for 'listeD', 'listeT', 'constant' in %union */
@@ -40,11 +36,9 @@ void afficher(constant *val);
 %token <entier> INTCST
 %token <reel>   FLOATCST
 %token <str>    IDF
-%token <str> STRING
 
 %token INT_TYPE
 %token FLOAT_TYPE
-%token STRING_TYPE
 
 %token ASSIGN /* := */
 
@@ -56,7 +50,6 @@ void afficher(constant *val);
 %token AND
 %token OR
 %token NOT /* ! */
-
 
 %left OR
 %left AND
@@ -147,12 +140,11 @@ const_declaration:
     }
     ;
 
+/* nonterm to hold the string "Int" or "Float" */
 type:
       INT_TYPE   { $$ = strdup("Int"); }
     | FLOAT_TYPE { $$ = strdup("Float"); }
-    | STRING_TYPE { $$ = strdup("String"); }
     ;
-
 
 block:
     '{' statements '}'
@@ -253,19 +245,25 @@ condition_comp:
     | '(' condition ')'
     ;
 
-
 iostatement:
-      INPUT '(' IDF ')' {
-        lire($3);
-      }
-    | OUTPUT '(' expression ')' {
-        afficher($3);
-      }
-    | OUTPUT '(' STRING ')' {
-        printf("%s\n", $3);
-      }
+      INPUT '(' ioparam ')'
+    | OUTPUT '(' ioparam ')'
     ;
 
+ioparam:
+      IDF
+      {
+        gestion_io_statement(0, $1, -1);
+      }
+    | IDF '[' INTCST ']'
+      {
+        gestion_io_statement(1, $1, $3);
+      }
+    | IDF '[' IDF ']'
+      {
+        gererTaille($1, $3);
+      }
+    ;
 
 %%
 
